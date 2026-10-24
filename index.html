@@ -45,7 +45,7 @@ function defaultData(){ return { schemaVersion:1, revision:1, updatedAt:new Date
 {id:'demo3',studentId:'student2',title:'Tiếng Anh',date:dateKey(new Date()),start:'17:30',end:'19:00',location:'Trung tâm',notes:'Mang sách bài tập',color:'#fbe8ce'}]}; }
 function normalizeData(d){ if(!d || !Array.isArray(d.events) || !Array.isArray(d.students)) throw new Error('File timetable.json không đúng cấu trúc.'); d.schemaVersion ||= 1; d.revision ||= 1; return d; }
 function configReady(){ return GITHUB.owner !== 'YOUR_GITHUB_USERNAME' && GITHUB.repo !== 'YOUR_PRIVATE_REPO'; }
-function tokenReady(){ return GITHUB.token && GITHUB.token !== 'PASTE_FINE_GRAINED_GITHUB_TOKEN_HERE'; }
+function tokenReady(){ return GITHUB.token && GITHUB.token !== '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'; }
 function dataUrl(){ return `timetable.json?ts=${Date.now()}`; }
 async function loadPublished({quiet=false}={}){
   if(state.dirty && !quiet){ showMessage('Bạn có thay đổi chưa lưu. Hãy lưu trước khi tải dữ liệu mới để tránh mất thay đổi.','err'); return; }
