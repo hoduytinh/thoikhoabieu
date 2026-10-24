@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "revision": 1,
+  "updatedAt": "2026-10-24T00:00:00.000Z",
+  "updatedBy": "system",
+  "students": [
+    { "id": "student1", "name": "Học sinh 1", "color": "#dceafe" },
+    { "id": "student2", "name": "Học sinh 2", "color": "#dff5e7" }
+  ],
+  "events": []
+}
