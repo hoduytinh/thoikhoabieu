@@ -1,42 +1,110 @@
 {
   "schemaVersion": 1,
-  "revision": 3,
-  "updatedAt": "2026-10-24T13:39:57.229Z",
+  "revision": 5,
+  "updatedAt": "2026-10-24T14:42:49.637Z",
   "updatedBy": "admin",
   "students": [
     {
       "id": "student1",
-      "name": "Học sinh 1",
+      "name": "Gia Sư",
       "color": "#dceafe"
     },
     {
-      "id": "student2",
-      "name": "Học sinh 2",
-      "color": "#dff5e7"
+      "id": "st_8d0f47d4-6a1c-4f47-ae2b-e6236195ed60",
+      "name": "Học chính",
+      "color": "#e5fffb"
     }
   ],
   "events": [
     {
-      "id": "ev_7d205647-9c51-4d81-bd8e-68059eeae1f0",
+      "id": "ev_baf9fb24-3155-4cec-be9e-25e96cc4628d",
       "studentId": "student1",
-      "title": "A",
+      "title": "GS Hóa",
       "date": "2026-10-24",
-      "start": "07:00",
-      "end": "07:45",
-      "location": "",
+      "start": "13:30",
+      "end": "15:30",
+      "location": "Nhà",
       "notes": "",
-      "color": "#dceafe"
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
     },
     {
-      "id": "ev_4937be4e-dc3c-462f-ace9-47f83fa00bb1",
+      "id": "ev_c90fe46e-9b61-42af-8196-5074411879ba",
       "studentId": "student1",
-      "title": "Ba",
+      "title": "GS Toán",
       "date": "2026-10-24",
-      "start": "07:00",
-      "end": "07:45",
-      "location": "",
+      "start": "18:30",
+      "end": "20:30",
+      "location": "Nhà",
       "notes": "",
-      "color": "#dceafe"
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
+    },
+    {
+      "id": "ev_472d3419-947e-4c85-b685-796cce491722",
+      "studentId": "student1",
+      "title": "GS IELT",
+      "date": "2026-10-25",
+      "start": "13:30",
+      "end": "15:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
+    },
+    {
+      "id": "ev_6360721c-d5df-4e40-8768-b7d7deb18338",
+      "studentId": "student1",
+      "title": "Tiếng Trung",
+      "date": "2026-10-23",
+      "start": "20:00",
+      "end": "21:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": [],
+      "marks": {}
+    },
+    {
+      "id": "ev_663a0898-ad8e-429a-b2a1-b9cad88affc6",
+      "studentId": "student1",
+      "title": "Tiếng Trung",
+      "date": "2026-10-21",
+      "start": "20:00",
+      "end": "21:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
+    },
+    {
+      "id": "ev_74a142e7-c14d-4194-8c3d-c12dc5950d49",
+      "studentId": "student1",
+      "title": "Tiếng Trung",
+      "date": "2026-10-19",
+      "start": "20:00",
+      "end": "21:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
     }
-  ]
+  ],
+  "notes": {
+    "day": {},
+    "week": {},
+    "month": {}
+  }
 }
