@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "revision": 7,
-  "updatedAt": "2026-10-24T15:18:31.403Z",
+  "revision": 8,
+  "updatedAt": "2026-10-24T15:25:22.096Z",
   "updatedBy": "admin",
   "students": [
     {
       "id": "student1",
       "name": "Gia Sư",
-      "color": "#dceafe"
+      "color": "#cde6fe"
     },
     {
       "id": "st_8d0f47d4-6a1c-4f47-ae2b-e6236195ed60",
