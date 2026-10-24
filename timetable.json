@@ -1,11 +1,31 @@
 {
   "schemaVersion": 1,
-  "revision": 1,
-  "updatedAt": "2026-10-24T00:00:00.000Z",
-  "updatedBy": "system",
+  "revision": 2,
+  "updatedAt": "2026-10-24T13:27:44.026Z",
+  "updatedBy": "admin",
   "students": [
-    { "id": "student1", "name": "Học sinh 1", "color": "#dceafe" },
-    { "id": "student2", "name": "Học sinh 2", "color": "#dff5e7" }
+    {
+      "id": "student1",
+      "name": "Học sinh 1",
+      "color": "#dceafe"
+    },
+    {
+      "id": "student2",
+      "name": "Học sinh 2",
+      "color": "#dff5e7"
+    }
   ],
-  "events": []
+  "events": [
+    {
+      "id": "ev_7d205647-9c51-4d81-bd8e-68059eeae1f0",
+      "studentId": "student1",
+      "title": "A",
+      "date": "2026-10-24",
+      "start": "07:00",
+      "end": "07:45",
+      "location": "",
+      "notes": "",
+      "color": "#dceafe"
+    }
+  ]
 }
