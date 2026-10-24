@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 5,
-  "updatedAt": "2026-10-24T14:42:49.637Z",
+  "revision": 6,
+  "updatedAt": "2026-10-24T15:01:46.741Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -100,6 +100,21 @@
       "repeat": "weekly",
       "until": "",
       "exceptions": []
+    },
+    {
+      "id": "ev_7b1f5ce3-e29a-4b00-bd16-f72503b63d04",
+      "studentId": "student1",
+      "title": "Test",
+      "date": "2026-10-24",
+      "start": "22:00",
+      "end": "23:59",
+      "location": "",
+      "notes": "",
+      "color": "",
+      "repeat": "none",
+      "until": "",
+      "exceptions": [],
+      "marks": {}
     }
   ],
   "notes": {
