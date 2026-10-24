@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 2,
-  "updatedAt": "2026-10-24T13:27:44.026Z",
+  "revision": 3,
+  "updatedAt": "2026-10-24T13:39:57.229Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -20,6 +20,17 @@
       "id": "ev_7d205647-9c51-4d81-bd8e-68059eeae1f0",
       "studentId": "student1",
       "title": "A",
+      "date": "2026-10-24",
+      "start": "07:00",
+      "end": "07:45",
+      "location": "",
+      "notes": "",
+      "color": "#dceafe"
+    },
+    {
+      "id": "ev_4937be4e-dc3c-462f-ace9-47f83fa00bb1",
+      "studentId": "student1",
+      "title": "Ba",
       "date": "2026-10-24",
       "start": "07:00",
       "end": "07:45",
