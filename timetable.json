@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 8,
-  "updatedAt": "2026-10-24T15:25:22.096Z",
+  "revision": 9,
+  "updatedAt": "2026-10-24T15:28:30.701Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -28,7 +28,10 @@
       "color": "",
       "repeat": "weekly",
       "until": "",
-      "exceptions": []
+      "exceptions": [],
+      "marks": {
+        "2026-10-24": "absent"
+      }
     },
     {
       "id": "ev_c90fe46e-9b61-42af-8196-5074411879ba",
@@ -42,7 +45,10 @@
       "color": "",
       "repeat": "weekly",
       "until": "",
-      "exceptions": []
+      "exceptions": [],
+      "marks": {
+        "2026-10-24": "absent"
+      }
     },
     {
       "id": "ev_472d3419-947e-4c85-b685-796cce491722",
