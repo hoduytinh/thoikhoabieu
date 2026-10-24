@@ -9,21 +9,21 @@ Bản demo tĩnh, không dùng Firebase. Dữ liệu chung lưu trong `timetable
 3. Đảm bảo `timetable.json` nằm ở thư mục gốc của website được xuất bản.
 4. Đẩy hai file `index.html` và `timetable.json` lên nhánh được GitHub Pages dùng.
 5. Vào Settings → Pages để bật triển khai. Tài khoản GitHub Free chỉ hỗ trợ Pages từ repository public; dùng repository private cần gói hỗ trợ phù hợp. Dù repository nguồn private, website Pages thường vẫn công khai trên Internet trừ một số cấu hình Enterprise.
-6. Chỉ tài khoản `admin` được đồng bộ dữ liệu: tạo Fine-grained Personal Access Token, giới hạn vào đúng repository, cấp Repository permissions → Contents: Read and write. Không cấp quyền rộng hơn cần thiết.
+6. Tạo Fine-grained Personal Access Token để đồng bộ dữ liệu, giới hạn vào đúng repository, cấp Repository permissions → Contents: Read and write. Không cấp quyền rộng hơn cần thiết.
 7. Trong `index.html`, dán phần token SAU tiền tố `github_pat_` vào `TOKEN_REST` (ví dụ token `github_pat_11ABC...` → `TOKEN_REST = '11ABC...'`), rồi commit và push. Không dán nguyên token liền mạch: GitHub secret scanning sẽ phát hiện và tự thu hồi token trong repo public. 
 
 ## Tài khoản đăng nhập
 
-- `admin` / `tinhteo123`
-- `giasu` / `pass123`
-- `buu` / `pass123`
+- `admin` / `tinhteo123` — toàn quyền
+- `giasu` / `pass123` — chỉ sửa ghi chú và Trễ/Nghỉ
+- `buu` / `pass123` — toàn quyền
 
 Các tài khoản này chỉ là khóa giao diện. Mật khẩu được đưa vào JavaScript phía client và có thể bị xem bởi người truy cập website. Không dùng cho dữ liệu nhạy cảm.
 
 ## Lưu ý về đồng bộ
 
 - Trang đọc dữ liệu trực tiếp qua GitHub API (không phải chờ Pages), lỗi thì dùng `timetable.json` của Pages; tự kiểm tra mỗi 60 giây khi không có thay đổi chưa lưu.
-- Người sửa thay đổi bản nháp cục bộ rồi bấm nút “💾 Lưu” trên thanh trên cùng (chỉ admin).
+- Người sửa thay đổi bản nháp cục bộ rồi bấm nút “💾 Lưu” trên thanh trên cùng (mọi tài khoản đã đăng nhập).
 - Đăng nhập được nhớ trong trình duyệt (localStorage) đến khi bấm Đăng xuất.
 - Ghi chú ngày/tuần/tháng lưu trong `notes.day` / `notes.week` (khóa là ngày thứ Hai) / `notes.month` của `timetable.json`.
 - Ghi dữ liệu cần GitHub token; token mặc định được nhúng (tách 2 phần) trong `index.html`.

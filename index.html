@@ -25,14 +25,17 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .hidden{display:none!important}
 select{padding:8px;border:1px solid var(--line);border-radius:9px;background:#fff}
 .grid{display:grid;overflow-x:auto;border:1px solid var(--line);border-radius:12px}
-.gh{display:flex;justify-content:space-between;align-items:center;gap:4px;padding:7px 8px;background:#f7f9fc;border-left:1px solid var(--line);font-weight:700;font-size:13px;white-space:nowrap}
+.gh{display:flex;justify-content:center;align-items:center;gap:6px;padding:7px 8px;background:#f7f9fc;border-left:1px solid var(--line);font-weight:800;font-size:13px;text-align:center;white-space:nowrap}
 .gh span{cursor:pointer}
 .gh.today{background:#edf3ff;color:#214eb4}
-.gh.corner{border-left:0;position:sticky;left:0;z-index:2}
-.gsec{grid-column:1/-1;background:#eef2f9;color:#173e9a;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 10px;border-top:1px solid var(--line)}
-.gt{position:sticky;left:0;z-index:1;background:#fff;border-top:1px solid var(--line);padding:7px 8px;text-align:right;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
-.gc{border-top:1px solid var(--line);border-left:1px solid var(--line);padding:4px;min-height:34px;min-width:0;display:grid;gap:4px;align-content:start}
+.gh.corner{border-left:0;position:sticky;left:0;z-index:4}
+.gsec{background:#eef2f9;color:#173e9a;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 10px;border-top:1px solid var(--line)}
+.gt{position:sticky;left:0;z-index:3;background:#fff;border-top:1px solid var(--line);padding:2px 6px;text-align:center;font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}
+.gc{border-top:1px solid var(--line);border-left:1px solid var(--line);min-width:0}
+.gc .daynote{margin:4px}
 .gc.today{background:#f7f9ff}
+.gev{position:relative;z-index:1;padding:2px;min-width:0;display:flex}
+.gev>.event{flex:1;min-width:0}
 .daynote{font-size:12px;background:#fff8e1;border-radius:7px;padding:5px 7px;white-space:pre-wrap;overflow-wrap:anywhere}
 .event{border-radius:9px;padding:6px 8px;font-size:12px;border-left:4px solid rgba(0,0,0,.22);background:#e8efff;overflow-wrap:anywhere}
 .event .time{font-size:10px;line-height:1.2;color:#475467;opacity:.85}
@@ -93,9 +96,11 @@ button.mark-absent.on{background:#dc2626;border-color:#dc2626;color:#fff}
    Đây là đăng nhập giao diện, KHÔNG phải cơ chế bảo mật thực sự.
 */
 const FIXED_USERS = [
-  { username: 'admin', password: 'tinhteo123', label: 'Quản trị lịch', canEdit: true },
-  { username: 'giasu', password: 'pass123', label: 'Gia sư', canEdit: true },
-  { username: 'buu', password: 'pass123', label: 'Bửu', canEdit: true }
+/* role: 'full' = toàn quyền (sửa lịch, học sinh, ghi chú, Trễ/Nghỉ, lưu)
+         'mark' = chỉ sửa ghi chú và Trễ/Nghỉ (vẫn lưu được các thay đổi đó) */
+  { username: 'admin', password: 'tinhteo123', label: 'Quản trị lịch', role: 'full' },
+  { username: 'giasu', password: 'pass123', label: 'Gia sư', role: 'mark' },
+  { username: 'buu', password: 'pass123', label: 'Bửu', role: 'full' }
 ];
 /* Token mặc định nhúng trên web. Dán PHẦN SAU "github_pat_" vào TOKEN_REST.
    Token được tách 2 phần để GitHub secret scanning không tự thu hồi khi push lên repo public. */
@@ -117,8 +122,8 @@ const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
 const fmtDate = d => `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
 const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tokenReady = () => !TOKEN_REST.startsWith('PASTE_');
-const canEdit = () => !!state.user?.canEdit;
-const isAdmin = () => state.user?.username === 'admin';
+const canEdit = () => state.user?.role === 'full';
+const canMark = () => !!state.user;
 
 let toastTimer;
 function toast(text, kind=''){ const t=$('toast'); t.textContent=text; t.className=kind; clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.className='hidden', kind==='err'?7000:3500); }
@@ -165,7 +170,7 @@ async function loadData({quiet=false}={}){
 }
 
 async function save(){
-  if(state.saving || !isAdmin()) return;
+  if(state.saving || !canMark()) return;
   if(!state.dirty){ toast('Không có thay đổi cần lưu.', 'ok'); return; }
   if(!tokenReady()){ toast('Chưa cấu hình token GitHub (TOKEN_REST trong index.html).', 'err'); return; }
   state.saving = true; refreshControls();
@@ -186,7 +191,6 @@ async function save(){
 
 function markDirty(){
   state.dirty = true; render();
-  if(!isAdmin()) toast('Đã thay đổi trên máy này. Chỉ tài khoản admin mới lưu được lên GitHub.', 'err');
 }
 
 /* ================== RENDER ================== */
@@ -196,11 +200,11 @@ function refreshControls(){
   $('loginBtn').textContent = state.user ? `Đăng xuất (${state.user.username})` : 'Đăng nhập';
   $('addBtn').classList.toggle('hidden', !ed);
   $('studentsBtn').classList.toggle('hidden', !ed);
-  $('saveBtn').classList.toggle('hidden', !isAdmin());
+  $('saveBtn').classList.toggle('hidden', !canMark());
   $('saveBtn').classList.toggle('dirty', state.dirty);
   $('saveBtn').textContent = state.saving ? 'Đang lưu…' : state.dirty ? '💾 Lưu thay đổi' : '💾 Đã lưu';
   $('saveBtn').disabled = state.saving;
-  $('userLine').textContent = state.user ? `${state.user.label}${isAdmin() ? '' : ' · chỉ admin lưu được lên GitHub'}` : 'Chế độ xem';
+  $('userLine').textContent = state.user ? `${state.user.label}${canEdit() ? '' : ' · chỉ sửa ghi chú và Trễ/Nghỉ'}` : 'Chế độ xem';
 }
 function renderStudentFilter(){
   const sel = $('studentFilter'), current = sel.value;
@@ -234,14 +238,14 @@ const markOf = e => e.marks?.[e.date] || '';
 const cardColor = e => MARKS[markOf(e)]?.bg || eventColor(e);
 function toggleMark(id, k, type){
   const e = state.data.events.find(x => x.id === id);
-  if(!e || !canEdit()) return;
+  if(!e || !canMark()) return;
   e.marks = { ...(e.marks || {}) };
   if(e.marks[k] === type) delete e.marks[k]; else e.marks[k] = type;
   markDirty();
 }
 function eventCard(e){
   const s = studentOf(e), m = markOf(e), id = escapeHtml(e.id), k = escapeHtml(e.date);
-  return `<article class="event ${m}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canEdit()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}<button class="small" data-edit="${id}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button></div>`:''}</article>`;
+  return `<article class="event ${m}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
 }
 
 function noteInfo(type){
@@ -253,25 +257,59 @@ function noteInfo(type){
 function renderNotes(){
   $('notes').innerHTML = ['day','week','month'].map(type => {
     const {key,label} = noteInfo(type), text = state.data.notes[type][key] || '';
-    return `<div class="note"><div class="nhead"><span>📝 ${label}</span>${canEdit()?`<button class="small" data-note="${type}">Sửa</button>`:''}</div><div class="${text?'ntext':'hint'}">${text?escapeHtml(text):'Chưa có ghi chú.'}</div></div>`;
+    return `<div class="note"><div class="nhead"><span>📝 ${label}</span>${canMark()?`<button class="small" data-note="${type}">Sửa</button>`:''}</div><div class="${text?'ntext':'hint'}">${text?escapeHtml(text):'Chưa có ghi chú.'}</div></div>`;
   }).join('');
 }
 
 const fmt12 = t => { const [h,m] = t.split(':').map(Number); return `${(h%12)||12}:${pad(m)}`; };
-/* Lưới có cột giờ bên trái: luôn có 2 mục AM/PM, mỗi giờ bắt đầu có lịch được thêm 1 hàng. */
-function renderGrid(days, events){
-  const keys = days.map(dateKey), today = dateKey(new Date());
-  const perDay = Object.fromEntries(keys.map(k => [k, eventsOn(events, k)]));
-  const times = [...new Set(Object.values(perDay).flat().map(e => e.start))].sort();
-  const todayCls = k => k === today ? ' today' : '';
-  let html = `<div class="grid" style="grid-template-columns:64px repeat(${days.length},minmax(${days.length>1?130:0}px,1fr))"><div class="gh corner"></div>`;
-  html += days.map(d => { const k = dateKey(d); return `<div class="gh${todayCls(k)}"><span data-goto="${k}" title="Xem ngày">${DAY_NAMES[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth()+1)}</span>${canEdit()?`<button class="small" data-add="${k}" title="Thêm lịch">＋</button>`:''}</div>`; }).join('');
-  if(keys.some(k => state.data.notes.day[k])) html += '<div class="gt">📝</div>' + keys.map(k => `<div class="gc${todayCls(k)}">${state.data.notes.day[k]?`<div class="daynote">${escapeHtml(state.data.notes.day[k])}</div>`:''}</div>`).join('');
-  for(const [label, list] of [['AM', times.filter(t => t < '12:00')], ['PM', times.filter(t => t >= '12:00')]]){
-    html += `<div class="gsec">${label}</div>`;
-    if(!list.length) html += '<div class="gt"></div>' + keys.map(k => `<div class="gc${todayCls(k)}"></div>`).join('');
-    for(const t of list) html += `<div class="gt">${fmt12(t)}</div>` + keys.map(k => `<div class="gc${todayCls(k)}">${perDay[k].filter(e => e.start === t).map(eventCard).join('')}</div>`).join('');
+/* Xếp các lịch trùng giờ trong cùng ngày vào các làn cạnh nhau. Trả về số làn. */
+function layoutDay(list){
+  const lanesEnd = [];
+  for(const e of [...list].sort((a,b) => a.start.localeCompare(b.start) || b.end.localeCompare(a.end))){
+    let l = lanesEnd.findIndex(end => end <= e.start);
+    if(l < 0){ l = lanesEnd.length; lanesEnd.push(''); }
+    lanesEnd[l] = e.end; e._lane = l;
   }
+  const n = lanesEnd.length || 1;
+  for(const e of list){ e._span = 1; for(let l = e._lane+1; l < n && !list.some(a => a._lane === l && a.start < e.end && e.start < a.end); l++) e._span++; }
+  return n;
+}
+/* Lưới có cột giờ bên trái: luôn có 2 mục AM/PM; mỗi giờ bắt đầu/kết thúc có 1 hàng,
+   mỗi lịch kéo dài từ hàng giờ bắt đầu đến hàng giờ kết thúc. */
+function renderGrid(days, events){
+  const keys = days.map(dateKey), today = dateKey(new Date()), notes = state.data.notes.day;
+  const perDay = keys.map(k => eventsOn(events, k));
+  const lanes = perDay.map(layoutDay);
+  const colStart = []; let c = 2; for(const n of lanes){ colStart.push(c); c += n; }
+  const all = perDay.flat();
+  const pts = new Set(all.flatMap(e => [e.start, e.end]));
+  if(all.some(e => e.start < '12:00' && e.end > '12:00')) pts.add('12:00');
+  const times = [...pts].sort();
+  const rows = [{type:'head'}];
+  if(keys.some(k => notes[k])) rows.push({type:'note'});
+  for(const [label, list] of [['AM', times.filter(t => t < '12:00')], ['PM', times.filter(t => t >= '12:00')]]){
+    rows.push({type:'sec', label});
+    if(!list.length) rows.push({type:'empty'});
+    list.forEach(t => rows.push({type:'time', t}));
+  }
+  const line = {}; rows.forEach((r,i) => { if(r.type === 'time') line[r.t] = i+1; });
+  const heights = rows.map(r => {
+    if(r.type !== 'time') return 'auto';
+    const next = times[times.indexOf(r.t)+1], busy = next && all.some(e => e.start <= r.t && e.end > r.t);
+    return busy ? `minmax(${Math.min(240, Math.max(28, Math.round((toMin(next)-toMin(r.t))*0.9)))}px,auto)` : 'minmax(26px,auto)';
+  });
+  const dayW = days.length > 1 ? 130 : 0;
+  const cols = lanes.map(n => Array(n).fill(`minmax(${Math.round(dayW/n)}px,${(1/n).toFixed(4)}fr)`).join(' ')).join(' ');
+  const todayCls = k => k === today ? ' today' : '';
+  const dayCol = i => `grid-column:${colStart[i]}/span ${lanes[i]}`;
+  let html = `<div class="grid" style="grid-template-columns:64px ${cols};grid-template-rows:${heights.join(' ')}">`;
+  rows.forEach((r, ri) => {
+    const row = `grid-row:${ri+1}`;
+    if(r.type === 'head') html += `<div class="gh corner" style="${row};grid-column:1"></div>` + days.map((d,i) => `<div class="gh${todayCls(keys[i])}" style="${row};${dayCol(i)}"><span data-goto="${keys[i]}" title="Xem ngày">${DAY_NAMES[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth()+1)}</span>${canEdit()?`<button class="small" data-add="${keys[i]}" title="Thêm lịch">＋</button>`:''}</div>`).join('');
+    else if(r.type === 'sec') html += `<div class="gsec" style="${row};grid-column:1/-1">${r.label}</div>`;
+    else html += `<div class="gt" style="${row};grid-column:1">${r.type === 'time' ? fmt12(r.t) : r.type === 'note' ? '📝' : ''}</div>` + keys.map((k,i) => `<div class="gc${todayCls(k)}" style="${row};${dayCol(i)}">${r.type === 'note' && notes[k] ? `<div class="daynote">${escapeHtml(notes[k])}</div>` : ''}</div>`).join('');
+  });
+  perDay.forEach((list, i) => list.forEach(e => { html += `<div class="gev" style="grid-row:${line[e.start]}/${line[e.end]};grid-column:${colStart[i]+e._lane}/span ${e._span}">${eventCard(e)}</div>`; }));
   $('calendar').innerHTML = html + '</div>';
 }
 function renderDay(events){
@@ -383,7 +421,7 @@ function deleteEvent(id, k){
 }
 
 function openNoteForm(type){
-  if(!canEdit()) return;
+  if(!canMark()) return;
   const {key,label} = noteInfo(type);
   openModal(`<h2>${label}</h2><form id="noteForm"><div class="field"><textarea id="noteText" maxlength="2000">${escapeHtml(state.data.notes[type][key]||'')}</textarea></div><div class="modalfoot"><button type="button" id="cancelNote">Hủy</button><div class="right"><button class="primary" type="submit">Xong</button></div></div></form>`);
   $('cancelNote').onclick = closeModal; $('noteText').focus();
