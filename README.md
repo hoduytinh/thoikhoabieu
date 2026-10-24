@@ -10,7 +10,7 @@ Bản demo tĩnh, không dùng Firebase. Dữ liệu chung lưu trong `timetable
 4. Đẩy hai file `index.html` và `timetable.json` lên nhánh được GitHub Pages dùng.
 5. Vào Settings → Pages để bật triển khai. Tài khoản GitHub Free chỉ hỗ trợ Pages từ repository public; dùng repository private cần gói hỗ trợ phù hợp. Dù repository nguồn private, website Pages thường vẫn công khai trên Internet trừ một số cấu hình Enterprise.
 6. Chỉ tài khoản `admin` được đồng bộ dữ liệu: tạo Fine-grained Personal Access Token, giới hạn vào đúng repository, cấp Repository permissions → Contents: Read and write. Không cấp quyền rộng hơn cần thiết.
-7. Dán token vào thuộc tính `token` trong hằng `GITHUB` của `index.html`, sau đó commit và push. Token sẽ nằm trực tiếp trong source và luôn được dùng để đồng bộ cho đến khi bạn thay token, token hết hạn hoặc bị thu hồi.
+7. Trong `index.html`, dán phần token SAU tiền tố `github_pat_` vào `TOKEN_REST` (ví dụ token `github_pat_11ABC...` → `TOKEN_REST = '11ABC...'`), rồi commit và push. Không dán nguyên token liền mạch: GitHub secret scanning sẽ phát hiện và tự thu hồi token trong repo public. Admin cũng có thể nhập token riêng qua nút “Cấu hình token GitHub” (lưu localStorage, ưu tiên hơn token mặc định).
 
 ## Tài khoản đăng nhập
 
@@ -24,7 +24,7 @@ Các tài khoản này chỉ là khóa giao diện. Mật khẩu được đưa 
 
 - Người xem tải `timetable.json` từ website Pages khi mở trang và tự kiểm tra mỗi 60 giây; có thể bấm “Đồng bộ”.
 - Người sửa thay đổi bản nháp cục bộ rồi bấm “Lưu & đồng bộ lên GitHub”.
-- Ghi dữ liệu cần GitHub token; token không được nhúng vào mã nguồn.
+- Ghi dữ liệu cần GitHub token; token mặc định được nhúng (tách 2 phần) trong `index.html`.
 - Mỗi lần lưu tạo một commit trong repository.
 - Sau khi cập nhật file trên nhánh nguồn, GitHub Pages cần thời gian để triển khai lại. Vì vậy, tự kiểm tra 60 giây không đảm bảo mọi người thấy thay đổi ngay sau khi commit.
 - Nếu người khác đã cập nhật phiên bản JSON, ứng dụng phát hiện revision khác nhau và từ chối ghi đè mù quáng.
