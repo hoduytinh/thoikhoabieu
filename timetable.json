@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 4,
-  "updatedAt": "2026-10-24T14:41:02.662Z",
+  "revision": 5,
+  "updatedAt": "2026-10-24T14:42:49.637Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -72,6 +72,34 @@
       "until": "",
       "exceptions": [],
       "marks": {}
+    },
+    {
+      "id": "ev_663a0898-ad8e-429a-b2a1-b9cad88affc6",
+      "studentId": "student1",
+      "title": "Tiếng Trung",
+      "date": "2026-10-21",
+      "start": "20:00",
+      "end": "21:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
+    },
+    {
+      "id": "ev_74a142e7-c14d-4194-8c3d-c12dc5950d49",
+      "studentId": "student1",
+      "title": "Tiếng Trung",
+      "date": "2026-10-19",
+      "start": "20:00",
+      "end": "21:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
     }
   ],
   "notes": {
