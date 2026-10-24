@@ -12,12 +12,11 @@ Bản demo tĩnh, không dùng Firebase. Dữ liệu chung lưu trong `timetable
 6. Tài khoản cần ghi dữ liệu: tạo Fine-grained Personal Access Token, giới hạn vào đúng repository, cấp Repository permissions → Contents: Read and write. Không cấp quyền rộng hơn cần thiết.
 7. Đăng nhập trên website → “Cấu hình token GitHub” → dán token → “Lưu trong phiên”. Token chỉ lưu trong `sessionStorage` của tab hiện tại, không nằm trong file HTML. Đóng tab sẽ xóa token khỏi phiên đó.
 
-## Tài khoản mẫu — PHẢI ĐỔI
+## Tài khoản đăng nhập
 
-- `admin` / `change-me-admin`
-- `parent1` / `change-me-parent1`
-- `student1` / `change-me-student1`
-- `student2` / `change-me-student2`
+- `admin` / `tinhteo123`
+- `giasu` / `pass123`
+- `buu` / `pass123`
 
 Các tài khoản này chỉ là khóa giao diện. Mật khẩu được đưa vào JavaScript phía client và có thể bị xem bởi người truy cập website. Không dùng cho dữ liệu nhạy cảm.
 
