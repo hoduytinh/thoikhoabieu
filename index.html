@@ -4,102 +4,447 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#17243a"><title>Thời khóa biểu học sinh</title>
 <style>
-:root{--bg:#f4f6fa;--panel:#fff;--ink:#17243a;--muted:#667085;--line:#e4e8ef;--accent:#2857c5;--danger:#b42318;--ok:#067647}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:9px 13px}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button.danger{color:var(--danger)}button:disabled{opacity:.45;cursor:not-allowed}.app{max-width:1200px;margin:auto;padding:18px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}.brand h1{font-size:clamp(22px,3vw,30px);margin:0}.brand p{color:var(--muted);margin:3px 0 0}.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.status{font-size:12px;color:var(--muted);padding:6px 9px;border:1px solid var(--line);border-radius:99px;background:#fff}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 3px 12px #16213b08}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}.toolbar h2{margin:0;font-size:20px}.tabs{display:flex;gap:6px}.tabs button.active{background:#e9efff;color:#173e9a;border-color:#cbd8ff}.week{display:grid;grid-template-columns:68px repeat(7,minmax(100px,1fr));overflow:auto}.dayhead{padding:10px 6px;text-align:center;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;position:sticky;top:0;background:#fff}.timehead{border-bottom:1px solid var(--line)}.dayhead.today{background:#edf3ff;color:#214eb4}.slot{min-height:55px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:3px;position:relative}.slot.time{font-size:11px;color:var(--muted);text-align:right;padding:5px 7px 0 0;border-right:0}.event{border-radius:8px;padding:6px 7px;margin:2px 0;font-size:12px;overflow-wrap:anywhere;border-left:3px solid #5279d8;background:#e8efff;min-height:45px}.event b{display:block;font-size:12px}.event small{display:block;color:#3c4a65;margin-top:2px}.event button{padding:2px 5px;font-size:11px;margin-top:4px}.daylist{display:grid;gap:9px}.dayitem{display:grid;grid-template-columns:105px 1fr;gap:12px}.daytime{color:var(--muted);font-size:13px;padding-top:10px}.daycard{border-radius:10px;padding:11px 13px;background:#e8efff;border-left:4px solid #5279d8}.daycard b{display:block}.daycard .meta{font-size:12px;color:#3c4a65;margin-top:4px}.empty{padding:28px;text-align:center;color:var(--muted)}.hidden{display:none!important}.modalback{position:fixed;inset:0;background:#0b1220a8;display:flex;align-items:center;justify-content:center;padding:15px;z-index:10}.modal{background:#fff;border-radius:16px;width:min(540px,100%);max-height:92vh;overflow:auto;padding:20px}.modal h2{margin:0 0 15px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #ccd3df;border-radius:9px;padding:10px;background:#fff;color:var(--ink)}.field textarea{min-height:75px;resize:vertical}.modalfoot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:16px}.modalfoot .right{display:flex;gap:8px}.hint{font-size:12px;color:var(--muted)}.loginrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.loginrow strong{font-size:13px}.notice{padding:10px 12px;border-radius:10px;background:#fff4d6;color:#714b00;font-size:13px;margin:12px 0}.notice.ok{background:#e8f7ef;color:#05603a}.notice.err{background:#fff0ef;color:#912018}.footer{font-size:12px;color:var(--muted);text-align:center;padding:10px}.viewselect{padding:8px;border:1px solid var(--line);border-radius:9px;background:white}@media(max-width:700px){.app{padding:10px}.panel{padding:11px}.week{grid-template-columns:48px repeat(7,minmax(95px,1fr))}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.dayitem{grid-template-columns:80px 1fr}.actions button{padding:8px 10px}}
+:root{--bg:#f4f6fa;--panel:#fff;--ink:#17243a;--muted:#667085;--line:#e4e8ef;--accent:#2857c5;--danger:#b42318;--ok:#067647}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:8px 12px}
+button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+button.danger{color:var(--danger)}
+button.small{padding:2px 8px;font-size:12px;border-radius:7px}
+button:disabled{opacity:.45;cursor:not-allowed}
+#saveBtn.dirty{background:#d97706;border-color:#d97706}
+.app{max-width:1200px;margin:auto;padding:0 16px 16px}
+.top{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--bg);padding:12px 0}
+.brand h1{font-size:clamp(20px,3vw,26px);margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 3px 12px #16213b08}
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.toolbar h2{margin:0;font-size:19px}
+.hint{font-size:12px;color:var(--muted)}
+.hidden{display:none!important}
+select{padding:8px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.grid{display:grid;overflow-x:auto;border:1px solid var(--line);border-radius:12px}
+.gh{display:flex;justify-content:space-between;align-items:center;gap:4px;padding:7px 8px;background:#f7f9fc;border-left:1px solid var(--line);font-weight:700;font-size:13px;white-space:nowrap}
+.gh span{cursor:pointer}
+.gh.today{background:#edf3ff;color:#214eb4}
+.gh.corner{border-left:0;position:sticky;left:0;z-index:2}
+.gsec{grid-column:1/-1;background:#eef2f9;color:#173e9a;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 10px;border-top:1px solid var(--line)}
+.gt{position:sticky;left:0;z-index:1;background:#fff;border-top:1px solid var(--line);padding:7px 8px;text-align:right;font-size:12px;font-weight:700;color:var(--muted);white-space:nowrap}
+.gc{border-top:1px solid var(--line);border-left:1px solid var(--line);padding:4px;min-height:34px;min-width:0;display:grid;gap:4px;align-content:start}
+.gc.today{background:#f7f9ff}
+.daynote{font-size:12px;background:#fff8e1;border-radius:7px;padding:5px 7px;white-space:pre-wrap;overflow-wrap:anywhere}
+.event{border-radius:9px;padding:6px 8px;font-size:12px;border-left:4px solid rgba(0,0,0,.22);background:#e8efff;overflow-wrap:anywhere}
+.event .time{font-size:10px;line-height:1.2;color:#475467;opacity:.85}
+.event b{display:block;font-size:13px}
+.event small{display:block;color:#3c4a65;white-space:pre-wrap}
+.event .btns{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+.event.late{border-left-color:#d97706}
+.event.absent{border-left-color:#dc2626}
+.event.absent b{text-decoration:line-through}
+.event .tag{display:inline-block;font-size:10px;font-weight:700;padding:0 6px;border-radius:99px;margin-bottom:2px;color:#fff}
+.event.late .tag{background:#d97706}
+.event.absent .tag{background:#dc2626}
+button.mark-late.on{background:#d97706;border-color:#d97706;color:#fff}
+button.mark-absent.on{background:#dc2626;border-color:#dc2626;color:#fff}
+.empty{padding:20px;text-align:center;color:var(--muted);font-size:13px}
+.daylist{display:grid;gap:8px}
+.listday{font-weight:700;margin-top:8px}
+.month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.mhead{text-align:center;font-size:12px;font-weight:700;color:var(--muted);padding:4px}
+.mcell{border:1px solid var(--line);border-radius:9px;min-height:86px;padding:4px 5px;cursor:pointer;font-size:11px;overflow:hidden}
+.mcell:hover{background:#f7f9fc}
+.mcell.other{opacity:.45}
+.mcell.today{border-color:#9db5f0;background:#f4f7ff}
+.mcell .num{font-weight:700;font-size:12px}
+.mcell .mev{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:4px;padding:0 3px;margin-top:2px}
+.mcell .cnt{display:none;color:var(--accent);font-weight:700}
+.notes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.note{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fffdf5}
+.note .nhead{display:flex;justify-content:space-between;align-items:center;gap:6px;font-weight:700;font-size:13px;margin-bottom:4px}
+.note .ntext{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}
+.modalback{position:fixed;inset:0;background:#0b1220a8;display:flex;align-items:center;justify-content:center;padding:15px;z-index:10}
+.modal{position:relative;background:#fff;border-radius:16px;width:min(540px,100%);max-height:92vh;overflow:auto;padding:20px}
+.modal h2{margin:0 36px 15px 0}
+.modalx{position:absolute;top:12px;right:12px;width:32px;height:32px;padding:0;border-radius:50%;font-size:16px;line-height:1;color:var(--muted)}
+.modalx:hover{background:#f2f4f7;color:var(--ink)}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:grid;gap:5px}.field.full{grid-column:1/-1}
+.field label{font-size:12px;color:var(--muted);font-weight:700}
+.field input,.field select,.field textarea{width:100%;border:1px solid #ccd3df;border-radius:9px;padding:10px;background:#fff;color:var(--ink)}
+.field textarea{min-height:110px;resize:vertical}
+.modalfoot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:16px}
+.modalfoot .right{display:flex;gap:8px}
+.strow{display:grid;grid-template-columns:1fr 46px auto;gap:8px;align-items:center;margin-bottom:8px}
+.strow input[type=text]{border:1px solid #ccd3df;border-radius:9px;padding:9px;width:100%}
+.strow input[type=color]{width:46px;height:40px;border:1px solid #ccd3df;border-radius:9px;padding:2px;background:#fff}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:min(560px,92vw);padding:10px 14px;border-radius:10px;background:#17243a;color:#fff;font-size:13px;box-shadow:0 6px 20px #0003;z-index:20}
+#toast.err{background:#b42318}#toast.ok{background:#067647}
+@media(max-width:800px){.app{padding:0 10px 10px}.notes{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.mcell{min-height:56px}.mcell .mev{display:none}.mcell .cnt{display:block}}
 </style></head>
 <body><main class="app">
-<header class="top"><div class="brand"><h1>📚 Thời khóa biểu</h1><p>Lịch học dùng chung · đồng bộ qua GitHub</p></div><div class="actions"><span id="syncStatus" class="status">Đang khởi tạo…</span><button id="syncBtn">↻ Đồng bộ</button><button id="loginBtn" class="primary">Đăng nhập sửa lịch</button></div></header>
-<section class="panel"><div class="toolbar"><div><h2 id="rangeTitle">Lịch tuần</h2><div id="userLine" class="hint">Chế độ xem</div></div><div class="actions"><button id="prevBtn">← Trước</button><button id="todayBtn">Hôm nay</button><button id="nextBtn">Sau →</button><select id="viewMode" class="viewselect" aria-label="Kiểu xem"><option value="week">Tuần</option><option value="day">Ngày</option><option value="list">Danh sách</option></select><select id="studentFilter" class="viewselect" aria-label="Lọc hồ sơ"><option value="all">Tất cả học sinh</option></select><button id="addBtn" class="primary hidden">＋ Thêm lịch</button></div></div></section>
-<section id="calendarPanel" class="panel"><div id="calendar"></div></section>
-<section class="panel"><div class="toolbar"><div><b>Đồng bộ dữ liệu</b><div class="hint">Tự kiểm tra dữ liệu mới mỗi 60 giây.</div></div><div class="actions"><label class="hint"><input id="autoSync" type="checkbox" checked> Tự động</label><button id="saveBtn" class="primary hidden">Lưu & đồng bộ lên GitHub</button><button id="tokenBtn" class="hidden">Cấu hình token GitHub</button></div></div><div id="message" class="hint" style="margin-top:10px">Dữ liệu mẫu sẽ được tải từ timetable.json.</div></section>
-<div class="footer">Lưu ý: GitHub Pages có thể mất vài phút để xuất bản phiên bản JSON mới sau khi commit.</div>
-</main><div id="modalRoot"></div>
+<header class="top"><div class="brand"><h1>📚 Thời khóa biểu</h1><div id="userLine" class="hint">Chế độ xem</div></div><div class="actions"><button id="studentsBtn" class="hidden">👥 Học sinh</button><button id="addBtn" class="hidden">＋ Thêm lịch</button><button id="saveBtn" class="primary hidden">💾 Đã lưu</button><button id="loginBtn">Đăng nhập</button></div></header>
+<section class="panel"><div class="toolbar"><h2 id="rangeTitle">Lịch tuần</h2><div class="actions"><button id="prevBtn">←</button><button id="todayBtn">Hôm nay</button><button id="nextBtn">→</button><select id="viewMode" aria-label="Kiểu xem"><option value="day">Ngày</option><option value="week">Tuần</option><option value="month">Tháng</option><option value="list">Danh sách</option></select><select id="studentFilter" aria-label="Lọc học sinh"><option value="all">Tất cả học sinh</option></select></div></div></section>
+<section class="panel"><div id="notes" class="notes"></div></section>
+<section class="panel"><div id="calendar"></div></section>
+</main><div id="modalRoot"></div><div id="toast" class="hidden"></div>
 <script>
 /* ================== CẤU HÌNH NGƯỜI DÙNG ==================
    Đây là đăng nhập giao diện, KHÔNG phải cơ chế bảo mật thực sự.
-   Hãy thay username/password mẫu trước khi sử dụng.
 */
 const FIXED_USERS = [
   { username: 'admin', password: 'tinhteo123', label: 'Quản trị lịch', canEdit: true },
   { username: 'giasu', password: 'pass123', label: 'Gia sư', canEdit: true },
   { username: 'buu', password: 'pass123', label: 'Bửu', canEdit: true }
 ];
-/*
-   Token dưới đây sẽ được công khai cho mọi người có thể đọc website/repository.
-   Chỉ dán Fine-grained token có quyền tối thiểu Contents: Read and write cho repo này.
-*/
 /* Token mặc định nhúng trên web. Dán PHẦN SAU "github_pat_" vào TOKEN_REST.
    Token được tách 2 phần để GitHub secret scanning không tự thu hồi khi push lên repo public. */
 const TOKEN_REST = '11CFCMWZQ0wyGV459NgvA0_pzMVBmkUYZXHE6rhewZjnPouuQv24r48ORl1bTRzNHBDENPVLADcDWCWwhh';
 const GITHUB = { owner: 'hoduytinh', repo: 'thoikhoabieu', branch: 'main', path: 'timetable.json', token: 'github' + '_pat_' + TOKEN_REST };
 const POLL_MS = 60000;
+const USER_KEY = 'tkb_user';
+localStorage.removeItem('tkb_github_token');
+
 const $ = id => document.getElementById(id);
-const TOKEN_PLACEHOLDER = 'PASTE_FINE_GRAINED_GITHUB_TOKEN_HERE';
-const TOKEN_KEY = 'tkb_github_token';
-const state = { data: null, baseRevision: 0, viewDate: new Date(), view: 'week', user: null, dirty: false, saving: false, token: localStorage.getItem(TOKEN_KEY) || GITHUB.token, lastPublished: null };
+const state = { data: null, baseRevision: 0, viewDate: new Date(), view: 'week', user: null, dirty: false, saving: false };
 const DAY_NAMES = ['Chủ nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
 const pad = n => String(n).padStart(2,'0');
 const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const parseDate = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d,12); };
+const addDays = (d,n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
 const startOfWeek = d => { const x = new Date(d.getFullYear(),d.getMonth(),d.getDate(),12); x.setDate(x.getDate() - ((x.getDay()+6)%7)); return x; };
+const monthKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}`;
 const fmtDate = d => `${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`;
 const escapeHtml = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const setStatus = (text, cls='') => { $('syncStatus').textContent = text; $('syncStatus').style.color = cls==='err' ? '#b42318' : cls==='ok' ? '#067647' : ''; };
-function defaultData(){ return { schemaVersion:1, revision:1, updatedAt:new Date().toISOString(), updatedBy:'system', students:[{id:'student1',name:'Học sinh 1',color:'#dceafe'},{id:'student2',name:'Học sinh 2',color:'#dff5e7'}], events:[
-{id:'demo1',studentId:'student1',title:'Toán',date:dateKey(new Date()),start:'07:00',end:'07:45',location:'Trường',notes:'',color:'#dceafe'},
-{id:'demo2',studentId:'student1',title:'Ngữ văn',date:dateKey(new Date()),start:'08:00',end:'08:45',location:'Trường',notes:'',color:'#dff5e7'},
-{id:'demo3',studentId:'student2',title:'Tiếng Anh',date:dateKey(new Date()),start:'17:30',end:'19:00',location:'Trung tâm',notes:'Mang sách bài tập',color:'#fbe8ce'}]}; }
-function normalizeData(d){ if(!d || !Array.isArray(d.events) || !Array.isArray(d.students)) throw new Error('File timetable.json không đúng cấu trúc.'); d.schemaVersion ||= 1; d.revision ||= 1; return d; }
-function configReady(){ return GITHUB.owner !== 'YOUR_GITHUB_USERNAME' && GITHUB.repo !== 'YOUR_PRIVATE_REPO'; }
-function tokenReady(){ return !!state.token && !state.token.includes(TOKEN_PLACEHOLDER); }
-function dataUrl(){ return `timetable.json?ts=${Date.now()}`; }
-async function loadPublished({quiet=false}={}){
-  if(state.dirty && !quiet){ showMessage('Bạn có thay đổi chưa lưu. Hãy lưu trước khi tải dữ liệu mới để tránh mất thay đổi.','err'); return; }
-  try {
-    const response = await fetch(dataUrl(), {cache:'no-store'});
-    if(!response.ok) throw new Error(`Không tải được timetable.json (HTTP ${response.status}).`);
-    const data = normalizeData(await response.json());
-    const oldRevision = state.data?.revision;
-    state.data = data; state.baseRevision = Number(data.revision)||1; state.lastPublished = data.updatedAt || null;
-    render();
-    if(oldRevision !== data.revision) showMessage(`Đã tải dữ liệu mới nhất · phiên bản ${data.revision} · ${data.updatedAt ? new Date(data.updatedAt).toLocaleString('vi-VN') : ''}`, 'ok');
-    setStatus('Đã đồng bộ', 'ok');
-  } catch(err) {
-    if(!state.data) { state.data = defaultData(); render(); }
-    setStatus('Lỗi tải dữ liệu','err'); showMessage(`${err.message} Đang hiển thị dữ liệu dự phòng nếu có.`, 'err');
-  }
+const tokenReady = () => !TOKEN_REST.startsWith('PASTE_');
+const canEdit = () => !!state.user?.canEdit;
+const isAdmin = () => state.user?.username === 'admin';
+
+let toastTimer;
+function toast(text, kind=''){ const t=$('toast'); t.textContent=text; t.className=kind; clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.className='hidden', kind==='err'?7000:3500); }
+
+function defaultData(){ return { schemaVersion:1, revision:1, updatedAt:new Date().toISOString(), updatedBy:'system', students:[{id:'student1',name:'Học sinh 1',color:'#dceafe'}], events:[], notes:{} }; }
+function normalizeData(d){
+  if(!d || !Array.isArray(d.events) || !Array.isArray(d.students)) throw new Error('File timetable.json không đúng cấu trúc.');
+  d.schemaVersion ||= 1; d.revision ||= 1;
+  d.notes = { day:{}, week:{}, month:{}, ...(d.notes||{}) };
+  return d;
 }
-function showMessage(text,kind=''){ $('message').textContent=text; $('message').className = 'hint' + (kind ? ' notice '+kind : ''); }
-function canEdit(){ return !!state.user?.canEdit; }
-function isAdmin(){ return state.user?.username === 'admin'; }
-function refreshControls(){ $('loginBtn').textContent = state.user ? `Đăng xuất (${state.user.username})` : 'Đăng nhập sửa lịch'; $('addBtn').classList.toggle('hidden',!canEdit()); $('saveBtn').classList.toggle('hidden',!isAdmin()); $('tokenBtn').classList.toggle('hidden',!isAdmin()); $('userLine').textContent = state.user ? (isAdmin() ? `Đã đăng nhập: ${state.user.label} · quản trị và đồng bộ dữ liệu` : `Đã đăng nhập: ${state.user.label} · chỉ admin mới đồng bộ lên GitHub`) : 'Chế độ xem · đăng nhập để chỉnh sửa'; }
-function renderStudentFilter(){ const sel=$('studentFilter'), current=sel.value; sel.innerHTML='<option value="all">Tất cả học sinh</option>'+state.data.students.map(s=>`<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join(''); if([...sel.options].some(o=>o.value===current)) sel.value=current; }
-function filteredEvents(){ const sid=$('studentFilter').value; return state.data.events.filter(e=>sid==='all'||e.studentId===sid).sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start)); }
-function render(){ if(!state.data)return; refreshControls(); renderStudentFilter(); $('viewMode').value=state.view; const events=filteredEvents(); if(state.view==='week') renderWeek(events); else if(state.view==='day') renderDay(events); else renderList(events); }
-function eventCard(e,compact=false){ const s=state.data.students.find(x=>x.id===e.studentId); return `<article class="event" style="background:${escapeHtml(e.color||s?.color||'#e8efff')};border-left-color:${escapeHtml(e.color||'#5279d8')}"><b>${escapeHtml(e.title)}</b><small>${escapeHtml(e.start)}–${escapeHtml(e.end)}${e.location?' · '+escapeHtml(e.location):''}</small><small>${escapeHtml(s?.name||'Học sinh')}</small>${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canEdit()?`<button data-edit="${escapeHtml(e.id)}">Sửa</button> <button class="danger" data-delete="${escapeHtml(e.id)}">Xóa</button>`:''}</article>`; }
-function renderWeek(events){ const monday=startOfWeek(state.viewDate), days=Array.from({length:7},(_,i)=>{const d=new Date(monday);d.setDate(d.getDate()+i);return d;}); $('rangeTitle').textContent=`Tuần ${fmtDate(days[0])} – ${fmtDate(days[6])}`; const hours=Array.from({length:20},(_,i)=>i+5); let html='<div class="week"><div class="dayhead timehead">Giờ</div>'+days.map(d=>`<div class="dayhead ${dateKey(d)===dateKey(new Date())?'today':''}">${DAY_NAMES[d.getDay()]}<br>${pad(d.getDate())}/${pad(d.getMonth()+1)}</div>`).join(''); for(const h of hours){html+=`<div class="slot time">${pad(h)}:00</div>`; for(const d of days){const ds=dateKey(d); const ev=events.filter(e=>e.date===ds && Number(e.start.split(':')[0])===h); html+=`<div class="slot">${ev.map(e=>eventCard(e,true)).join('')}</div>`;}} html+='</div>'; $('calendar').innerHTML=html; bindEventActions(); }
-function renderDay(events){const d=state.viewDate, ds=dateKey(d), list=events.filter(e=>e.date===ds); $('rangeTitle').textContent=`${DAY_NAMES[d.getDay()]}, ${fmtDate(d)}`; $('calendar').innerHTML=list.length?`<div class="daylist">${list.map(e=>`<div class="dayitem"><div class="daytime">${escapeHtml(e.start)}–${escapeHtml(e.end)}</div><div>${eventCard(e)}</div></div>`).join('')}</div>`:'<div class="empty">Không có lịch học trong ngày này.</div>'; bindEventActions(); }
-function renderList(events){const monday=startOfWeek(state.viewDate), end=new Date(monday);end.setDate(end.getDate()+7); const list=events.filter(e=>parseDate(e.date)>=monday&&parseDate(e.date)<end); $('rangeTitle').textContent=`Danh sách · ${fmtDate(monday)} – ${fmtDate(new Date(end-86400000))}`; $('calendar').innerHTML=list.length?`<div class="daylist">${list.map(e=>`<div class="dayitem"><div class="daytime">${fmtDate(parseDate(e.date))}<br>${escapeHtml(e.start)}–${escapeHtml(e.end)}</div><div>${eventCard(e)}</div></div>`).join('')}</div>`:'<div class="empty">Chưa có lịch trong tuần này.</div>'; bindEventActions(); }
-function bindEventActions(){document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>openEventForm(b.dataset.edit));document.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteEvent(b.dataset.delete));}
-function openModal(content){$('modalRoot').innerHTML=`<div class="modalback" id="modalBack"><section class="modal">${content}</section></div>`;$('modalBack').addEventListener('click',e=>{if(e.target.id==='modalBack')closeModal()});}
-function closeModal(){$('modalRoot').innerHTML='';}
-function openLogin(){if(state.user){state.user=null;refreshControls();render();showMessage('Đã đăng xuất.','ok');return;} openModal(`<h2>Đăng nhập</h2><form id="loginForm"><div class="formgrid"><div class="field full"><label>Tên đăng nhập</label><input id="loginUser" autocomplete="username" required></div><div class="field full"><label>Mật khẩu</label><input id="loginPass" type="password" autocomplete="current-password" required></div></div><p class="hint">Tài khoản được cấu hình cố định trong index.html.</p><div class="modalfoot"><button type="button" id="cancelLogin">Hủy</button><div class="right"><button class="primary" type="submit">Đăng nhập</button></div></div></form>`); $('cancelLogin').onclick=closeModal; $('loginForm').onsubmit=e=>{e.preventDefault();const u=FIXED_USERS.find(x=>x.username===$('loginUser').value.trim()&&x.password===$('loginPass').value);if(!u){alert('Sai tên đăng nhập hoặc mật khẩu.');return;}state.user=u;closeModal();refreshControls();render();showMessage(`Đã đăng nhập với tài khoản ${u.username}.`,'ok');}; }
-function openTokenModal(){if(!isAdmin())return;openModal(`<h2>Token GitHub</h2><form id="tokenForm"><div class="formgrid"><div class="field full"><label>Fine-grained token (Contents: Read and write)</label><input id="tokenInput" type="password" autocomplete="off" placeholder="github_pat_..." value=""></div></div><p class="hint">Mặc định dùng token nhúng trong index.html (TOKEN_REST). Token nhập ở đây chỉ lưu trong trình duyệt này và được ưu tiên hơn token mặc định. ${tokenReady()?'Đang có token hợp lệ.':'Chưa có token.'}</p><div class="modalfoot"><button type="button" id="clearToken" class="danger">Xóa token</button><div class="right"><button type="button" id="cancelToken">Hủy</button> <button class="primary" type="submit">Lưu token</button></div></div></form>`);$('cancelToken').onclick=closeModal;$('clearToken').onclick=()=>{localStorage.removeItem(TOKEN_KEY);state.token=GITHUB.token;closeModal();showMessage('Đã xóa token khỏi trình duyệt, quay về token mặc định.','ok');};$('tokenForm').onsubmit=e=>{e.preventDefault();const t=$('tokenInput').value.trim();if(!t){alert('Hãy nhập token.');return;}localStorage.setItem(TOKEN_KEY,t);state.token=t;closeModal();showMessage('Đã lưu token trong trình duyệt. Bấm “Lưu & đồng bộ lên GitHub” để thử lại.','ok');};}
-function openEventForm(id=null){if(!canEdit())return;const old=id?state.data.events.find(e=>e.id===id):null;const e=old||{id:'ev_'+crypto.randomUUID(),studentId:state.data.students[0]?.id||'',title:'',date:dateKey(state.viewDate),start:'07:00',end:'07:45',location:'',notes:'',color:'#dceafe'};openModal(`<h2>${old?'Sửa lịch':'Thêm lịch học'}</h2><form id="eventForm"><div class="formgrid"><div class="field full"><label>Học sinh</label><select id="evStudent" required>${state.data.students.map(s=>`<option value="${escapeHtml(s.id)}" ${s.id===e.studentId?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}</select></div><div class="field full"><label>Môn học / hoạt động</label><input id="evTitle" required maxlength="100" value="${escapeHtml(e.title)}"></div><div class="field"><label>Ngày</label><input id="evDate" type="date" required value="${escapeHtml(e.date)}"></div><div class="field"><label>Địa điểm</label><input id="evLocation" maxlength="100" value="${escapeHtml(e.location||'')}"></div><div class="field"><label>Giờ bắt đầu</label><input id="evStart" type="time" required value="${escapeHtml(e.start)}"></div><div class="field"><label>Giờ kết thúc</label><input id="evEnd" type="time" required value="${escapeHtml(e.end)}"></div><div class="field"><label>Màu</label><input id="evColor" type="color" value="${escapeHtml(e.color||'#dceafe')}"></div><div class="field full"><label>Ghi chú</label><textarea id="evNotes" maxlength="500">${escapeHtml(e.notes||'')}</textarea></div></div><div class="modalfoot"><button type="button" id="cancelEvent">Hủy</button><div class="right"><button class="primary" type="submit">Lưu thay đổi</button></div></div></form>`);$('cancelEvent').onclick=closeModal;$('eventForm').onsubmit=ev=>{ev.preventDefault();const start=$('evStart').value,end=$('evEnd').value;if(start>=end){alert('Giờ kết thúc phải sau giờ bắt đầu.');return;}const next={...e,studentId:$('evStudent').value,title:$('evTitle').value.trim(),date:$('evDate').value,start,end,location:$('evLocation').value.trim(),notes:$('evNotes').value.trim(),color:$('evColor').value};if(!next.title)return;if(old)state.data.events=state.data.events.map(x=>x.id===id?next:x);else state.data.events.push(next);state.dirty=true;closeModal();render();showMessage('Đã thay đổi trên thiết bị này. Bấm “Lưu & đồng bộ lên GitHub” để lưu chung.','err');};}
-function deleteEvent(id){if(!canEdit())return;const e=state.data.events.find(x=>x.id===id);if(!e||!confirm(`Xóa lịch “${e.title}” ngày ${e.date}?`))return;state.data.events=state.data.events.filter(x=>x.id!==id);state.dirty=true;render();showMessage('Đã xóa ở bản nháp cục bộ. Bấm “Lưu & đồng bộ lên GitHub” để lưu chung.','err');}
+
+/* ================== GITHUB ================== */
 function utf8ToBase64(str){const bytes=new TextEncoder().encode(str);let bin='';for(let i=0;i<bytes.length;i+=0x8000)bin+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(bin);}
 function base64ToUtf8(str){const bin=atob(str.replace(/\n/g,''));const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));return new TextDecoder().decode(bytes);}
-function apiHeaders(){return {'Accept':'application/vnd.github+json','Authorization':`Bearer ${state.token}`,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'};}
-async function saveToGitHub(){if(state.saving)return;if(!isAdmin()){showMessage('Chỉ tài khoản admin mới được đồng bộ dữ liệu lên GitHub.','err');return;}if(!configReady()){showMessage('Hãy sửa owner và repo trong phần GITHUB ở index.html trước.','err');return;}if(!tokenReady()){openTokenModal();showMessage('Chưa có token GitHub. Hãy nhập token trong hộp thoại.','err');return;}if(!state.dirty){showMessage('Không có thay đổi cần lưu.','ok');return;}state.saving=true;$('saveBtn').disabled=true;setStatus('Đang lưu…');try{
- const api=`https://api.github.com/repos/${encodeURIComponent(GITHUB.owner)}/${encodeURIComponent(GITHUB.repo)}/contents/${GITHUB.path.split('/').map(encodeURIComponent).join('/')}`;
- const get=await fetch(api,{headers:apiHeaders(),cache:'no-store'});if(!get.ok)throw new Error(`Không đọc được file qua GitHub API (HTTP ${get.status}). Kiểm tra token, repository và quyền Contents.`);
- const remote=await get.json();const remoteData=normalizeData(JSON.parse(base64ToUtf8(remote.content)));
- if(Number(remoteData.revision)!==Number(state.baseRevision)){throw new Error(`Phát hiện xung đột: dữ liệu GitHub đã lên phiên bản ${remoteData.revision}, còn bản bạn đang sửa là ${state.baseRevision}. Hãy bấm Đồng bộ, kiểm tra lại rồi áp dụng thay đổi lần nữa.`);}
- const next={...state.data,revision:Number(remoteData.revision||0)+1,updatedAt:new Date().toISOString(),updatedBy:state.user.username};
- const put=await fetch(api,{method:'PUT',headers:apiHeaders(),body:JSON.stringify({message:`Update timetable (${state.user.username})`,content:utf8ToBase64(JSON.stringify(next,null,2)+'\n'),sha:remote.sha,branch:GITHUB.branch})});
- if(!put.ok){const err=await put.json().catch(()=>({}));throw new Error(`GitHub từ chối lưu (HTTP ${put.status}): ${err.message||'hãy kiểm tra token/quyền và thử lại'}`);}
- state.data=next;state.baseRevision=next.revision;state.dirty=false;render();setStatus('Đã lưu lên GitHub','ok');showMessage(`Đã lưu thành công phiên bản ${next.revision}. GitHub Pages có thể cần vài phút để xuất bản JSON mới; thiết bị khác sẽ thấy dữ liệu sau khi bản Pages cập nhật.`,'ok');
- }catch(err){setStatus('Chưa lưu được','err');showMessage(err.message,'err');}finally{state.saving=false;$('saveBtn').disabled=false;}}
-async function manualSync(){if(state.dirty&&!confirm('Bạn có thay đổi chưa lưu. Tải dữ liệu từ GitHub sẽ làm mất các thay đổi này. Tiếp tục?'))return;state.dirty=false;await loadPublished();}
-$('loginBtn').onclick=openLogin;$('syncBtn').onclick=manualSync;$('addBtn').onclick=()=>openEventForm();$('saveBtn').onclick=saveToGitHub;$('tokenBtn').onclick=openTokenModal;$('studentFilter').onchange=render;$('viewMode').onchange=()=>{state.view=$('viewMode').value;render();};$('prevBtn').onclick=()=>{if(state.view==='day')state.viewDate.setDate(state.viewDate.getDate()-1);else state.viewDate.setDate(state.viewDate.getDate()-7);render();};$('nextBtn').onclick=()=>{if(state.view==='day')state.viewDate.setDate(state.viewDate.getDate()+1);else state.viewDate.setDate(state.viewDate.getDate()+7);render();};$('todayBtn').onclick=()=>{state.viewDate=new Date();render();};$('autoSync').onchange=()=>showMessage($('autoSync').checked?'Tự động kiểm tra dữ liệu mỗi 60 giây đã bật.':'Đã tắt đồng bộ tự động.');
-loadPublished();setInterval(()=>{if($('autoSync').checked&&!state.dirty&&!state.saving)loadPublished({quiet:true});},POLL_MS);
+function apiUrl(){ return `https://api.github.com/repos/${encodeURIComponent(GITHUB.owner)}/${encodeURIComponent(GITHUB.repo)}/contents/${GITHUB.path.split('/').map(encodeURIComponent).join('/')}`; }
+function apiHeaders(){ return {'Accept':'application/vnd.github+json','Authorization':`Bearer ${GITHUB.token}`,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'}; }
+
+async function fetchLatest(){
+  // Đọc trực tiếp qua GitHub API để thấy dữ liệu mới ngay; nếu lỗi thì dùng bản GitHub Pages.
+  if(tokenReady()){
+    try {
+      const r = await fetch(apiUrl(), {headers:apiHeaders(), cache:'no-store'});
+      if(r.ok){ const j = await r.json(); return normalizeData(JSON.parse(base64ToUtf8(j.content))); }
+    } catch {}
+  }
+  const r = await fetch(`timetable.json?ts=${Date.now()}`, {cache:'no-store'});
+  if(!r.ok) throw new Error(`Không tải được timetable.json (HTTP ${r.status}).`);
+  return normalizeData(await r.json());
+}
+
+async function loadData({quiet=false}={}){
+  if(state.dirty || state.saving) return;
+  try {
+    const data = await fetchLatest();
+    if(state.dirty || state.saving) return;
+    if(state.data && Number(data.revision) < Number(state.data.revision)) return;
+    state.data = data; state.baseRevision = Number(data.revision)||1;
+    render();
+  } catch(err) {
+    if(!state.data){ state.data = normalizeData(defaultData()); render(); }
+    if(!quiet) toast(err.message, 'err');
+  }
+}
+
+async function save(){
+  if(state.saving || !isAdmin()) return;
+  if(!state.dirty){ toast('Không có thay đổi cần lưu.', 'ok'); return; }
+  if(!tokenReady()){ toast('Chưa cấu hình token GitHub (TOKEN_REST trong index.html).', 'err'); return; }
+  state.saving = true; refreshControls();
+  try {
+    const get = await fetch(apiUrl(), {headers:apiHeaders(), cache:'no-store'});
+    if(!get.ok) throw new Error(`Không đọc được file qua GitHub API (HTTP ${get.status}). Kiểm tra token và quyền Contents.`);
+    const remote = await get.json();
+    const remoteData = normalizeData(JSON.parse(base64ToUtf8(remote.content)));
+    if(Number(remoteData.revision) !== Number(state.baseRevision)) throw new Error(`Xung đột: dữ liệu trên GitHub đã ở phiên bản ${remoteData.revision}, bản đang sửa dựa trên phiên bản ${state.baseRevision}. Tải lại trang rồi sửa lại.`);
+    const next = { ...state.data, revision:Number(remoteData.revision)+1, updatedAt:new Date().toISOString(), updatedBy:state.user.username };
+    const put = await fetch(apiUrl(), {method:'PUT', headers:apiHeaders(), body:JSON.stringify({message:`Update timetable (${state.user.username})`, content:utf8ToBase64(JSON.stringify(next,null,2)+'\n'), sha:remote.sha, branch:GITHUB.branch})});
+    if(!put.ok){ const err = await put.json().catch(()=>({})); throw new Error(`GitHub từ chối lưu (HTTP ${put.status}): ${err.message||'kiểm tra token/quyền'}`); }
+    state.data = next; state.baseRevision = next.revision; state.dirty = false;
+    toast(`Đã lưu (phiên bản ${next.revision}).`, 'ok');
+  } catch(err) { toast(err.message, 'err'); }
+  finally { state.saving = false; render(); }
+}
+
+function markDirty(){
+  state.dirty = true; render();
+  if(!isAdmin()) toast('Đã thay đổi trên máy này. Chỉ tài khoản admin mới lưu được lên GitHub.', 'err');
+}
+
+/* ================== RENDER ================== */
+const studentOf = e => state.data.students.find(s => s.id === e.studentId);
+function refreshControls(){
+  const ed = canEdit();
+  $('loginBtn').textContent = state.user ? `Đăng xuất (${state.user.username})` : 'Đăng nhập';
+  $('addBtn').classList.toggle('hidden', !ed);
+  $('studentsBtn').classList.toggle('hidden', !ed);
+  $('saveBtn').classList.toggle('hidden', !isAdmin());
+  $('saveBtn').classList.toggle('dirty', state.dirty);
+  $('saveBtn').textContent = state.saving ? 'Đang lưu…' : state.dirty ? '💾 Lưu thay đổi' : '💾 Đã lưu';
+  $('saveBtn').disabled = state.saving;
+  $('userLine').textContent = state.user ? `${state.user.label}${isAdmin() ? '' : ' · chỉ admin lưu được lên GitHub'}` : 'Chế độ xem';
+}
+function renderStudentFilter(){
+  const sel = $('studentFilter'), current = sel.value;
+  sel.innerHTML = '<option value="all">Tất cả học sinh</option>' + state.data.students.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)}</option>`).join('');
+  sel.value = [...sel.options].some(o => o.value === current) ? current : 'all';
+}
+function filteredEvents(){
+  const sid = $('studentFilter').value;
+  return state.data.events.filter(e => sid === 'all' || e.studentId === sid);
+}
+const toMin = t => { const [h,m] = t.split(':').map(Number); return h*60+m; };
+const fromMin = m => `${pad(Math.floor(m/60))}:${pad(m%60)}`;
+const DURATIONS = [30,45,60,90,120,150,180,210,240];
+const durLabel = m => m < 60 ? `${m} phút` : `${m/60}h`.replace('.', ',');
+const REPEAT_LABELS = { none:'Không lặp lại', daily:'Hằng ngày', weekly:'Hằng tuần', monthly:'Hằng tháng' };
+const isRepeat = e => !!e.repeat && e.repeat !== 'none';
+function occursOn(e, k){
+  if(!isRepeat(e)) return e.date === k;
+  if(k < e.date || (e.until && k > e.until) || e.exceptions?.includes(k)) return false;
+  if(e.repeat === 'daily') return true;
+  const a = parseDate(e.date), b = parseDate(k);
+  if(e.repeat === 'weekly') return a.getDay() === b.getDay();
+  if(e.repeat === 'monthly') return a.getDate() === b.getDate();
+  return false;
+}
+/* Trả về các lịch diễn ra trong ngày k (đã triển khai lặp lại), date = k. */
+const eventsOn = (events, k) => events.filter(e => occursOn(e,k)).map(e => ({...e, date:k})).sort((a,b) => a.start.localeCompare(b.start));
+function eventColor(e){ return e.color || studentOf(e)?.color || '#e8efff'; }
+const MARKS = { late:{ label:'Trễ', icon:'⏰', bg:'#fde68a' }, absent:{ label:'Nghỉ', icon:'❌', bg:'#fecaca' } };
+const markOf = e => e.marks?.[e.date] || '';
+const cardColor = e => MARKS[markOf(e)]?.bg || eventColor(e);
+function toggleMark(id, k, type){
+  const e = state.data.events.find(x => x.id === id);
+  if(!e || !canEdit()) return;
+  e.marks = { ...(e.marks || {}) };
+  if(e.marks[k] === type) delete e.marks[k]; else e.marks[k] = type;
+  markDirty();
+}
+function eventCard(e){
+  const s = studentOf(e), m = markOf(e), id = escapeHtml(e.id), k = escapeHtml(e.date);
+  return `<article class="event ${m}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canEdit()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}<button class="small" data-edit="${id}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button></div>`:''}</article>`;
+}
+
+function noteInfo(type){
+  const d = state.viewDate, mon = startOfWeek(d);
+  if(type === 'day') return { key:dateKey(d), label:`Ghi chú ngày ${fmtDate(d)}` };
+  if(type === 'week') return { key:dateKey(mon), label:`Ghi chú tuần ${pad(mon.getDate())}/${pad(mon.getMonth()+1)} – ${fmtDate(addDays(mon,6))}` };
+  return { key:monthKey(d), label:`Ghi chú tháng ${d.getMonth()+1}/${d.getFullYear()}` };
+}
+function renderNotes(){
+  $('notes').innerHTML = ['day','week','month'].map(type => {
+    const {key,label} = noteInfo(type), text = state.data.notes[type][key] || '';
+    return `<div class="note"><div class="nhead"><span>📝 ${label}</span>${canEdit()?`<button class="small" data-note="${type}">Sửa</button>`:''}</div><div class="${text?'ntext':'hint'}">${text?escapeHtml(text):'Chưa có ghi chú.'}</div></div>`;
+  }).join('');
+}
+
+const fmt12 = t => { const [h,m] = t.split(':').map(Number); return `${(h%12)||12}:${pad(m)}`; };
+/* Lưới có cột giờ bên trái: luôn có 2 mục AM/PM, mỗi giờ bắt đầu có lịch được thêm 1 hàng. */
+function renderGrid(days, events){
+  const keys = days.map(dateKey), today = dateKey(new Date());
+  const perDay = Object.fromEntries(keys.map(k => [k, eventsOn(events, k)]));
+  const times = [...new Set(Object.values(perDay).flat().map(e => e.start))].sort();
+  const todayCls = k => k === today ? ' today' : '';
+  let html = `<div class="grid" style="grid-template-columns:64px repeat(${days.length},minmax(${days.length>1?130:0}px,1fr))"><div class="gh corner"></div>`;
+  html += days.map(d => { const k = dateKey(d); return `<div class="gh${todayCls(k)}"><span data-goto="${k}" title="Xem ngày">${DAY_NAMES[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth()+1)}</span>${canEdit()?`<button class="small" data-add="${k}" title="Thêm lịch">＋</button>`:''}</div>`; }).join('');
+  if(keys.some(k => state.data.notes.day[k])) html += '<div class="gt">📝</div>' + keys.map(k => `<div class="gc${todayCls(k)}">${state.data.notes.day[k]?`<div class="daynote">${escapeHtml(state.data.notes.day[k])}</div>`:''}</div>`).join('');
+  for(const [label, list] of [['AM', times.filter(t => t < '12:00')], ['PM', times.filter(t => t >= '12:00')]]){
+    html += `<div class="gsec">${label}</div>`;
+    if(!list.length) html += '<div class="gt"></div>' + keys.map(k => `<div class="gc${todayCls(k)}"></div>`).join('');
+    for(const t of list) html += `<div class="gt">${fmt12(t)}</div>` + keys.map(k => `<div class="gc${todayCls(k)}">${perDay[k].filter(e => e.start === t).map(eventCard).join('')}</div>`).join('');
+  }
+  $('calendar').innerHTML = html + '</div>';
+}
+function renderDay(events){
+  const d = state.viewDate;
+  $('rangeTitle').textContent = `${DAY_NAMES[d.getDay()]}, ${fmtDate(d)}`;
+  renderGrid([d], events);
+}
+function renderWeek(events){
+  const mon = startOfWeek(state.viewDate), days = Array.from({length:7}, (_,i) => addDays(mon,i));
+  $('rangeTitle').textContent = `Tuần ${fmtDate(days[0])} – ${fmtDate(days[6])}`;
+  renderGrid(days, events);
+}
+function renderMonth(events){
+  const d = state.viewDate, first = new Date(d.getFullYear(), d.getMonth(), 1, 12), last = new Date(d.getFullYear(), d.getMonth()+1, 0, 12);
+  const start = startOfWeek(first), cells = Math.ceil((Math.round((last-start)/864e5)+1)/7)*7, today = dateKey(new Date());
+  $('rangeTitle').textContent = `Tháng ${d.getMonth()+1}/${d.getFullYear()}`;
+  let html = '<div class="month">' + ['T2','T3','T4','T5','T6','T7','CN'].map(x => `<div class="mhead">${x}</div>`).join('');
+  for(let i=0; i<cells; i++){
+    const day = addDays(start,i), k = dateKey(day), list = eventsOn(events, k);
+    html += `<div class="mcell ${day.getMonth()!==d.getMonth()?'other':''} ${k===today?'today':''}" data-goto="${k}"><div class="num">${day.getDate()}${state.data.notes.day[k]?' 📝':''}</div>${list.map(e => `<div class="mev" style="background:${escapeHtml(cardColor(e))}">${markOf(e)?MARKS[markOf(e)].icon+' ':''}${escapeHtml(e.start)} ${escapeHtml(e.title)}</div>`).join('')}${list.length?`<div class="cnt">${list.length} lịch</div>`:''}</div>`;
+  }
+  $('calendar').innerHTML = html + '</div>';
+}
+function renderList(events){
+  const mon = startOfWeek(state.viewDate);
+  $('rangeTitle').textContent = `Danh sách · ${fmtDate(mon)} – ${fmtDate(addDays(mon,6))}`;
+  let html = '';
+  for(let i=0; i<7; i++){
+    const x = addDays(mon,i), list = eventsOn(events, dateKey(x));
+    if(list.length) html += `<div class="listday">${DAY_NAMES[x.getDay()]}, ${fmtDate(x)}</div>` + list.map(eventCard).join('');
+  }
+  $('calendar').innerHTML = html ? `<div class="daylist">${html}</div>` : '<div class="empty">Chưa có lịch trong tuần này.</div>';
+}
+function render(){
+  if(!state.data) return;
+  refreshControls(); renderStudentFilter(); renderNotes();
+  $('viewMode').value = state.view;
+  const events = filteredEvents();
+  ({day:renderDay, week:renderWeek, month:renderMonth, list:renderList})[state.view](events);
+  bindActions();
+}
+function bindActions(){
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openEventForm(b.dataset.edit));
+  document.querySelectorAll('[data-delete]').forEach(b => b.onclick = () => deleteEvent(b.dataset.delete, b.dataset.date));
+  document.querySelectorAll('[data-mark]').forEach(b => b.onclick = () => toggleMark(b.dataset.id, b.dataset.date, b.dataset.mark));
+  document.querySelectorAll('[data-add]').forEach(b => b.onclick = () => openEventForm(null, b.dataset.add));
+  document.querySelectorAll('[data-note]').forEach(b => b.onclick = () => openNoteForm(b.dataset.note));
+  document.querySelectorAll('[data-goto]').forEach(b => b.onclick = () => { state.viewDate = parseDate(b.dataset.goto); state.view = 'day'; render(); });
+}
+
+/* ================== MODALS ================== */
+function openModal(content){ $('modalRoot').innerHTML = `<div class="modalback"><section class="modal"><button type="button" class="modalx" id="modalX" title="Đóng" aria-label="Đóng">✕</button>${content}</section></div>`; $('modalX').onclick = closeModal; }
+function closeModal(){ $('modalRoot').innerHTML = ''; }
+
+function openLogin(){
+  if(state.user){ state.user = null; localStorage.removeItem(USER_KEY); render(); toast('Đã đăng xuất.', 'ok'); return; }
+  openModal(`<h2>Đăng nhập</h2><form id="loginForm"><div class="formgrid"><div class="field full"><label>Tên đăng nhập</label><input id="loginUser" autocomplete="username" required></div><div class="field full"><label>Mật khẩu</label><input id="loginPass" type="password" autocomplete="current-password" required></div></div><div class="modalfoot"><button type="button" id="cancelLogin">Hủy</button><div class="right"><button class="primary" type="submit">Đăng nhập</button></div></div></form>`);
+  $('cancelLogin').onclick = closeModal; $('loginUser').focus();
+  $('loginForm').onsubmit = e => {
+    e.preventDefault();
+    const u = FIXED_USERS.find(x => x.username === $('loginUser').value.trim() && x.password === $('loginPass').value);
+    if(!u){ alert('Sai tên đăng nhập hoặc mật khẩu.'); return; }
+    state.user = u; localStorage.setItem(USER_KEY, u.username);
+    closeModal(); render(); toast(`Đã đăng nhập: ${u.username}.`, 'ok');
+  };
+}
+
+function openEventForm(id=null, date=null){
+  if(!canEdit()) return;
+  if(!state.data.students.length){ toast('Hãy thêm học sinh trước.', 'err'); openStudentsForm(); return; }
+  const old = id ? state.data.events.find(e => e.id === id) : null;
+  const sid = $('studentFilter').value;
+  const e = old || { id:'ev_'+crypto.randomUUID(), studentId: sid !== 'all' ? sid : state.data.students[0].id, title:'', date: date || dateKey(state.viewDate), start:'07:00', end:'08:00', location:'', notes:'', color:'', repeat:'none', until:'' };
+  openModal(`<h2>${old?'Sửa lịch':'Thêm lịch'}</h2>${old && isRepeat(old)?'<p class="hint">Đây là lịch lặp lại: thay đổi áp dụng cho cả chuỗi.</p>':''}<form id="eventForm"><div class="formgrid"><div class="field full"><label>Học sinh</label><select id="evStudent" required>${state.data.students.map(s => `<option value="${escapeHtml(s.id)}" ${s.id===e.studentId?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}</select></div><div class="field full"><label>Môn học / hoạt động</label><input id="evTitle" required maxlength="100" value="${escapeHtml(e.title)}"></div><div class="field"><label>${isRepeat(e)?'Ngày bắt đầu':'Ngày'}</label><input id="evDate" type="date" required value="${escapeHtml(e.date)}"></div><div class="field"><label>Địa điểm</label><input id="evLocation" maxlength="100" value="${escapeHtml(e.location||'')}"></div><div class="field"><label>Giờ bắt đầu</label><input id="evStart" type="time" required value="${escapeHtml(e.start)}"></div><div class="field"><label>Thời lượng</label><select id="evDur">${DURATIONS.map(m => `<option value="${m}">${durLabel(m)}</option>`).join('')}<option value="">Tùy chỉnh</option></select></div><div class="field"><label>Giờ kết thúc</label><input id="evEnd" type="time" required value="${escapeHtml(e.end)}"></div><div class="field"><label>Màu (mặc định theo học sinh)</label><input id="evColor" type="color" value="${escapeHtml(eventColor(e))}"></div><div class="field"><label>Lặp lại</label><select id="evRepeat">${Object.entries(REPEAT_LABELS).map(([v,l]) => `<option value="${v}" ${v===(e.repeat||'none')?'selected':''}>${l}</option>`).join('')}</select></div><div class="field" id="evUntilField"><label>Lặp đến ngày (để trống = mãi mãi)</label><input id="evUntil" type="date" value="${escapeHtml(e.until||'')}"></div><div class="field full"><label>Ghi chú</label><textarea id="evNotes" maxlength="500">${escapeHtml(e.notes||'')}</textarea></div></div><div class="modalfoot"><button type="button" id="cancelEvent">Hủy</button><div class="right"><button class="primary" type="submit">Xong</button></div></div></form>`);
+  const syncEnd = () => { const d = $('evDur').value; if(d && $('evStart').value) $('evEnd').value = fromMin(Math.min(toMin($('evStart').value) + Number(d), 23*60+59)); };
+  const syncDur = () => { if(!$('evStart').value || !$('evEnd').value) return; const diff = toMin($('evEnd').value) - toMin($('evStart').value); $('evDur').value = DURATIONS.includes(diff) ? String(diff) : ''; };
+  const syncRepeat = () => $('evUntilField').classList.toggle('hidden', $('evRepeat').value === 'none');
+  syncDur(); syncRepeat();
+  $('evStart').oninput = () => $('evDur').value ? syncEnd() : syncDur();
+  $('evDur').onchange = syncEnd;
+  $('evEnd').oninput = syncDur;
+  $('evRepeat').onchange = syncRepeat;
+  let colorTouched = !!e.color;
+  $('evColor').oninput = () => colorTouched = true;
+  $('evStudent').onchange = () => { if(!colorTouched) $('evColor').value = state.data.students.find(s => s.id === $('evStudent').value)?.color || '#e8efff'; };
+  $('cancelEvent').onclick = closeModal;
+  $('eventForm').onsubmit = ev => {
+    ev.preventDefault();
+    const start = $('evStart').value, end = $('evEnd').value, repeat = $('evRepeat').value, until = repeat === 'none' ? '' : $('evUntil').value;
+    if(start >= end){ alert('Giờ kết thúc phải sau giờ bắt đầu.'); return; }
+    if(until && until < $('evDate').value){ alert('Ngày kết thúc lặp lại phải sau ngày bắt đầu.'); return; }
+    const next = { ...e, studentId:$('evStudent').value, title:$('evTitle').value.trim(), date:$('evDate').value, start, end, location:$('evLocation').value.trim(), notes:$('evNotes').value.trim(), color: colorTouched ? $('evColor').value : '', repeat, until, exceptions: repeat === 'none' ? [] : (e.exceptions || []) };
+    if(repeat === 'none' && !isRepeat(e)) next.marks = e.marks?.[e.date] ? { [next.date]: e.marks[e.date] } : {};
+    if(!next.title) return;
+    if(old) state.data.events = state.data.events.map(x => x.id === id ? next : x); else state.data.events.push(next);
+    closeModal(); markDirty();
+  };
+}
+function deleteEvent(id, k){
+  if(!canEdit()) return;
+  const e = state.data.events.find(x => x.id === id);
+  if(!e) return;
+  const removeAll = () => { state.data.events = state.data.events.filter(x => x.id !== id); closeModal(); markDirty(); };
+  if(!isRepeat(e)){ if(confirm(`Xóa lịch “${e.title}” ngày ${fmtDate(parseDate(e.date))}?`)) removeAll(); return; }
+  openModal(`<h2>Xóa lịch lặp lại</h2><p>“${escapeHtml(e.title)}” · ${REPEAT_LABELS[e.repeat]}</p><div class="modalfoot"><button type="button" id="delCancel">Hủy</button><div class="right"><button class="danger" id="delOne">Chỉ ngày ${fmtDate(parseDate(k))}</button><button class="danger" id="delAll">Cả chuỗi</button></div></div>`);
+  $('delCancel').onclick = closeModal;
+  $('delAll').onclick = removeAll;
+  $('delOne').onclick = () => { e.exceptions = [...(e.exceptions || []), k]; closeModal(); markDirty(); };
+}
+
+function openNoteForm(type){
+  if(!canEdit()) return;
+  const {key,label} = noteInfo(type);
+  openModal(`<h2>${label}</h2><form id="noteForm"><div class="field"><textarea id="noteText" maxlength="2000">${escapeHtml(state.data.notes[type][key]||'')}</textarea></div><div class="modalfoot"><button type="button" id="cancelNote">Hủy</button><div class="right"><button class="primary" type="submit">Xong</button></div></div></form>`);
+  $('cancelNote').onclick = closeModal; $('noteText').focus();
+  $('noteForm').onsubmit = e => {
+    e.preventDefault();
+    const t = $('noteText').value.trim();
+    if(t === (state.data.notes[type][key]||'')){ closeModal(); return; }
+    if(t) state.data.notes[type][key] = t; else delete state.data.notes[type][key];
+    closeModal(); markDirty();
+  };
+}
+
+function openStudentsForm(){
+  if(!canEdit()) return;
+  const draft = state.data.students.map(s => ({...s}));
+  openModal(`<h2>Học sinh</h2><form id="stForm"><div id="stRows"></div><button type="button" id="stAdd">＋ Thêm học sinh</button><div class="modalfoot"><button type="button" id="stCancel">Hủy</button><div class="right"><button class="primary" type="submit">Xong</button></div></div></form>`);
+  const paint = () => {
+    $('stRows').innerHTML = draft.map((s,i) => `<div class="strow"><input type="text" data-i="${i}" data-f="name" maxlength="60" placeholder="Tên học sinh" value="${escapeHtml(s.name)}"><input type="color" data-i="${i}" data-f="color" value="${escapeHtml(s.color||'#e8efff')}" title="Màu"><button type="button" class="small danger" data-remove="${i}">Xóa</button></div>`).join('') || '<p class="hint">Chưa có học sinh.</p>';
+    $('stRows').querySelectorAll('input').forEach(inp => inp.oninput = () => { draft[Number(inp.dataset.i)][inp.dataset.f] = inp.value; });
+    $('stRows').querySelectorAll('[data-remove]').forEach(b => b.onclick = () => {
+      const i = Number(b.dataset.remove), s = draft[i], n = state.data.events.filter(e => e.studentId === s.id).length;
+      if(n && !confirm(`Xóa “${s.name}” sẽ xóa luôn ${n} lịch của học sinh này. Tiếp tục?`)) return;
+      draft.splice(i,1); paint();
+    });
+  };
+  paint();
+  $('stAdd').onclick = () => { draft.push({ id:'st_'+crypto.randomUUID(), name:'', color:'#e8efff' }); paint(); [...$('stRows').querySelectorAll('input[type=text]')].pop().focus(); };
+  $('stCancel').onclick = closeModal;
+  $('stForm').onsubmit = e => {
+    e.preventDefault();
+    draft.forEach(s => s.name = s.name.trim());
+    if(draft.some(s => !s.name)){ alert('Tên học sinh không được để trống.'); return; }
+    if(JSON.stringify(draft) === JSON.stringify(state.data.students)){ closeModal(); return; }
+    const keep = new Set(draft.map(s => s.id)), removed = new Set(state.data.students.filter(s => !keep.has(s.id)).map(s => s.id));
+    state.data.students = draft;
+    state.data.events = state.data.events.filter(ev => !removed.has(ev.studentId));
+    closeModal(); markDirty();
+  };
+}
+
+/* ================== KHỞI TẠO ================== */
+function move(step){
+  const d = state.viewDate;
+  if(state.view === 'day') state.viewDate = addDays(d, step);
+  else if(state.view === 'month') state.viewDate = new Date(d.getFullYear(), d.getMonth()+step, 1, 12);
+  else state.viewDate = addDays(d, 7*step);
+  render();
+}
+$('loginBtn').onclick = openLogin;
+$('saveBtn').onclick = save;
+$('addBtn').onclick = () => openEventForm();
+$('studentsBtn').onclick = openStudentsForm;
+$('studentFilter').onchange = render;
+$('viewMode').onchange = () => { state.view = $('viewMode').value; render(); };
+$('prevBtn').onclick = () => move(-1);
+$('nextBtn').onclick = () => move(1);
+$('todayBtn').onclick = () => { state.viewDate = new Date(); render(); };
+window.addEventListener('beforeunload', e => { if(state.dirty){ e.preventDefault(); e.returnValue = ''; } });
+
+state.user = FIXED_USERS.find(u => u.username === localStorage.getItem(USER_KEY)) || null;
+refreshControls();
+loadData();
+setInterval(() => loadData({quiet:true}), POLL_MS);
 </script></body></html>
