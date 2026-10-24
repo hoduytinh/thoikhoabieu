@@ -15,7 +15,9 @@ button.small{padding:2px 8px;font-size:12px;border-radius:7px}
 button:disabled{opacity:.45;cursor:not-allowed}
 #saveBtn.dirty{background:#d97706;border-color:#d97706}
 .app{max-width:1200px;margin:auto;padding:0 16px 16px}
-.top{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--bg);padding:12px 0}
+.stickybar{position:sticky;top:0;z-index:5;background:var(--bg);padding-bottom:1px}
+.stickybar .panel{margin-bottom:12px;padding:10px 14px}
+.top{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0}
 .brand h1{font-size:clamp(20px,3vw,26px);margin:0}
 .actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:0 3px 12px #16213b08}
@@ -36,6 +38,19 @@ select{padding:8px;border:1px solid var(--line);border-radius:9px;background:#ff
 .gc.today{background:#f7f9ff}
 .gev{position:relative;z-index:1;padding:2px;min-width:0;display:flex}
 .gev>.event{flex:1;min-width:0}
+.event.now,.mev.now{background:linear-gradient(120deg,#fef08a,#facc15,#fde047,#fbbf24,#fef08a)!important;background-size:300% 300%!important;border-left-color:#b45309;color:#422006;position:relative;z-index:2;overflow:hidden;animation:nowpulse 1.6s ease-in-out infinite,nowflow 4s linear infinite}
+.event.now{transform:scale(1.03);border-left-width:6px}
+.event.now b{font-size:14px;color:#422006}
+.event.now small,.event.now .time{color:#713f12;opacity:1}
+.event.now::before,.mev.now::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-20deg);animation:nowshine 2.2s ease-in-out infinite;pointer-events:none}
+.event.now::after{content:'● ĐANG DIỄN RA';display:inline-block;margin-top:5px;padding:2px 8px;border-radius:999px;background:#b45309;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;animation:nowblink 1s steps(2,start) infinite}
+.gev.now{z-index:5}
+.arow.now .atime{background:#fde047;box-shadow:0 0 0 2px #facc15,0 0 12px 3px rgba(250,204,21,.7);animation:nowpulse 1.6s ease-in-out infinite}
+@keyframes nowpulse{0%,100%{box-shadow:0 0 0 2px #facc15,0 0 10px 2px rgba(250,204,21,.6)}50%{box-shadow:0 0 0 4px #eab308,0 0 26px 9px rgba(250,204,21,1)}}
+@keyframes nowflow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes nowshine{0%{left:-60%}60%,100%{left:130%}}
+@keyframes nowblink{to{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.event.now,.mev.now,.arow.now .atime,.event.now::before,.mev.now::before,.event.now::after{animation:none}}
 .daynote{font-size:12px;background:#fff8e1;border-radius:7px;padding:5px 7px;white-space:pre-wrap;overflow-wrap:anywhere}
 .event{border-radius:9px;padding:6px 8px;font-size:12px;border-left:4px solid rgba(0,0,0,.22);background:#e8efff;overflow-wrap:anywhere}
 .event .time{font-size:10px;line-height:1.2;color:#475467;opacity:.85}
@@ -83,11 +98,55 @@ button.mark-absent.on{background:#dc2626;border-color:#dc2626;color:#fff}
 .strow input[type=color]{width:46px;height:40px;border:1px solid #ccd3df;border-radius:9px;padding:2px;background:#fff}
 #toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);max-width:min(560px,92vw);padding:10px 14px;border-radius:10px;background:#17243a;color:#fff;font-size:13px;box-shadow:0 6px 20px #0003;z-index:20}
 #toast.err{background:#b42318}#toast.ok{background:#067647}
-@media(max-width:800px){.app{padding:0 10px 10px}.notes{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.mcell{min-height:56px}.mcell .mev{display:none}.mcell .cnt{display:block}}
+.agenda{display:grid;gap:10px}
+.aday{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.aday.today{border-color:#9db5f0}
+.ahead{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#f7f9fc;font-weight:800;font-size:14px}
+.aday.today .ahead{background:#edf3ff;color:#214eb4}
+.ahead span{cursor:pointer}
+.abody{padding:6px;display:grid;gap:6px}
+.arow{display:grid;grid-template-columns:62px 1fr;gap:6px;align-items:stretch}
+.atime{display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:800;font-size:13px;text-align:center;background:#f7f9fc;border-radius:8px;padding:4px 2px}
+.atime .ts{color:#16a34a}
+.atime .te{color:#f87171;font-size:11px}
+.gt.ts{color:#16a34a}
+.gt.te{color:#f87171}
+.gt.ts.te span{background:linear-gradient(to bottom,#f87171 50%,#16a34a 50%);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* ===== Giao diện điện thoại (tự nhận hoặc chọn tay) ===== */
+body.mobile{font-size:14px}
+body.mobile .app{padding:0 8px 8px}
+body.mobile .top{padding:8px 0;flex-wrap:nowrap}
+body.mobile .brand{min-width:0}
+body.mobile .brand h1{font-size:18px;white-space:nowrap}
+body.mobile #userLine{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body.mobile .top .actions{flex-wrap:nowrap;gap:6px}
+body.mobile .top .actions button{padding:8px 10px}
+body.mobile .lbl{display:none}
+body.mobile .stickybar .panel{padding:8px;margin-bottom:8px;border-radius:12px}
+body.mobile .toolbar{gap:6px}
+body.mobile .toolbar h2{font-size:15px;width:100%;text-align:center}
+body.mobile .toolbar .actions{width:100%;flex-wrap:nowrap;gap:6px}
+body.mobile .toolbar .actions button{padding:7px 10px}
+body.mobile .toolbar select{flex:1;min-width:0;padding:7px 4px}
+body.mobile .panel{padding:8px;border-radius:12px;margin-bottom:8px}
+body.mobile .notes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:8px}
+body.mobile .note{flex:0 0 86%;scroll-snap-align:start}
+body.mobile .event button.small{padding:5px 10px;font-size:13px}
+body.mobile .mcell{min-height:52px;padding:3px}
+body.mobile .mcell .mev{display:none}
+body.mobile .mcell .cnt{display:block}
+body.mobile .mhead{font-size:11px}
+body.mobile .modalback{align-items:flex-end;padding:0}
+body.mobile .modal{width:100%;max-height:94vh;border-radius:16px 16px 0 0;padding:16px}
+body.mobile .formgrid{grid-template-columns:1fr}
+body.mobile .field.full{grid-column:auto}
+body.mobile .field input,body.mobile .field select,body.mobile .field textarea,body.mobile .strow input[type=text]{font-size:16px}
+body.mobile .modalfoot button{padding:10px 14px}
+body.mobile #toast{bottom:12px}
 </style></head>
 <body><main class="app">
-<header class="top"><div class="brand"><h1>📚 Thời khóa biểu</h1><div id="userLine" class="hint">Chế độ xem</div></div><div class="actions"><button id="studentsBtn" class="hidden">👥 Học sinh</button><button id="addBtn" class="hidden">＋ Thêm lịch</button><button id="saveBtn" class="primary hidden">💾 Đã lưu</button><button id="loginBtn">Đăng nhập</button></div></header>
-<section class="panel"><div class="toolbar"><h2 id="rangeTitle">Lịch tuần</h2><div class="actions"><button id="prevBtn">←</button><button id="todayBtn">Hôm nay</button><button id="nextBtn">→</button><select id="viewMode" aria-label="Kiểu xem"><option value="day">Ngày</option><option value="week">Tuần</option><option value="month">Tháng</option><option value="list">Danh sách</option></select><select id="studentFilter" aria-label="Lọc học sinh"><option value="all">Tất cả học sinh</option></select></div></div></section>
+<div class="stickybar"><header class="top"><div class="brand"><h1>📚 Thời khóa biểu</h1><div id="userLine" class="hint">Chế độ xem</div></div><div class="actions"><button id="studentsBtn" class="hidden" title="Học sinh">👥<span class="lbl"> Học sinh</span></button><button id="addBtn" class="hidden" title="Thêm lịch">＋<span class="lbl"> Thêm lịch</span></button><button id="saveBtn" class="primary hidden">💾</button><button id="layoutBtn"></button><button id="loginBtn">Đăng nhập</button></div></header>
+<section class="panel"><div class="toolbar"><h2 id="rangeTitle">Lịch tuần</h2><div class="actions"><button id="prevBtn">←</button><button id="todayBtn">Hôm nay</button><button id="nextBtn">→</button><select id="viewMode" aria-label="Kiểu xem"><option value="day">Ngày</option><option value="week">Tuần</option><option value="month">Tháng</option><option value="list">Danh sách</option></select><select id="studentFilter" aria-label="Lọc học sinh"><option value="all">Tất cả học sinh</option></select></div></div></section></div>
 <section class="panel"><div id="notes" class="notes"></div></section>
 <section class="panel"><div id="calendar"></div></section>
 </main><div id="modalRoot"></div><div id="toast" class="hidden"></div>
@@ -197,12 +256,14 @@ function markDirty(){
 const studentOf = e => state.data.students.find(s => s.id === e.studentId);
 function refreshControls(){
   const ed = canEdit();
-  $('loginBtn').textContent = state.user ? `Đăng xuất (${state.user.username})` : 'Đăng nhập';
+  $('loginBtn').innerHTML = state.user ? `🚪<span class="lbl"> Đăng xuất (${escapeHtml(state.user.username)})</span>` : '👤<span class="lbl"> Đăng nhập</span>';
+  $('loginBtn').title = state.user ? `Đăng xuất (${state.user.username})` : 'Đăng nhập';
   $('addBtn').classList.toggle('hidden', !ed);
   $('studentsBtn').classList.toggle('hidden', !ed);
   $('saveBtn').classList.toggle('hidden', !canMark());
   $('saveBtn').classList.toggle('dirty', state.dirty);
-  $('saveBtn').textContent = state.saving ? 'Đang lưu…' : state.dirty ? '💾 Lưu thay đổi' : '💾 Đã lưu';
+  $('saveBtn').innerHTML = state.saving ? '⏳<span class="lbl"> Đang lưu…</span>' : state.dirty ? '💾<span class="lbl"> Lưu thay đổi</span>' : '💾<span class="lbl"> Đã lưu</span>';
+  $('saveBtn').title = state.dirty ? 'Lưu thay đổi' : 'Đã lưu';
   $('saveBtn').disabled = state.saving;
   $('userLine').textContent = state.user ? `${state.user.label}${canEdit() ? '' : ' · chỉ sửa ghi chú và Trễ/Nghỉ'}` : 'Chế độ xem';
 }
@@ -245,7 +306,7 @@ function toggleMark(id, k, type){
 }
 function eventCard(e){
   const s = studentOf(e), m = markOf(e), id = escapeHtml(e.id), k = escapeHtml(e.date);
-  return `<article class="event ${m}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
+  return `<article class="event ${m}" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
 }
 
 function noteInfo(type){
@@ -282,6 +343,7 @@ function renderGrid(days, events){
   const lanes = perDay.map(layoutDay);
   const colStart = []; let c = 2; for(const n of lanes){ colStart.push(c); c += n; }
   const all = perDay.flat();
+  const starts = new Set(all.map(e => e.start)), ends = new Set(all.map(e => e.end));
   const pts = new Set(all.flatMap(e => [e.start, e.end]));
   if(all.some(e => e.start < '12:00' && e.end > '12:00')) pts.add('12:00');
   const times = [...pts].sort();
@@ -307,7 +369,7 @@ function renderGrid(days, events){
     const row = `grid-row:${ri+1}`;
     if(r.type === 'head') html += `<div class="gh corner" style="${row};grid-column:1"></div>` + days.map((d,i) => `<div class="gh${todayCls(keys[i])}" style="${row};${dayCol(i)}"><span data-goto="${keys[i]}" title="Xem ngày">${DAY_NAMES[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth()+1)}</span>${canEdit()?`<button class="small" data-add="${keys[i]}" title="Thêm lịch">＋</button>`:''}</div>`).join('');
     else if(r.type === 'sec') html += `<div class="gsec" style="${row};grid-column:1/-1">${r.label}</div>`;
-    else html += `<div class="gt" style="${row};grid-column:1">${r.type === 'time' ? fmt12(r.t) : r.type === 'note' ? '📝' : ''}</div>` + keys.map((k,i) => `<div class="gc${todayCls(k)}" style="${row};${dayCol(i)}">${r.type === 'note' && notes[k] ? `<div class="daynote">${escapeHtml(notes[k])}</div>` : ''}</div>`).join('');
+    else html += `<div class="gt${r.type === 'time' ? (starts.has(r.t) ? ' ts' : '') + (ends.has(r.t) ? ' te' : '') : ''}" style="${row};grid-column:1"${r.type === 'time' ? ` title="${[starts.has(r.t) && 'Bắt đầu', ends.has(r.t) && 'Kết thúc'].filter(Boolean).join(' / ')}"` : ''}>${r.type === 'time' ? `<span>${fmt12(r.t)}</span>` : r.type === 'note' ? '📝' : ''}</div>` + keys.map((k,i) => `<div class="gc${todayCls(k)}" style="${row};${dayCol(i)}">${r.type === 'note' && notes[k] ? `<div class="daynote">${escapeHtml(notes[k])}</div>` : ''}</div>`).join('');
   });
   perDay.forEach((list, i) => list.forEach(e => { html += `<div class="gev" style="grid-row:${line[e.start]}/${line[e.end]};grid-column:${colStart[i]+e._lane}/span ${e._span}">${eventCard(e)}</div>`; }));
   $('calendar').innerHTML = html + '</div>';
@@ -320,7 +382,16 @@ function renderDay(events){
 function renderWeek(events){
   const mon = startOfWeek(state.viewDate), days = Array.from({length:7}, (_,i) => addDays(mon,i));
   $('rangeTitle').textContent = `Tuần ${fmtDate(days[0])} – ${fmtDate(days[6])}`;
-  renderGrid(days, events);
+  if(isMobile()) renderAgenda(days, events); else renderGrid(days, events);
+}
+const ampm = t => `${fmt12(t)} ${t < '12:00' ? 'AM' : 'PM'}`;
+/* Dạng dọc cho điện thoại: mỗi ngày 1 khối, mỗi lịch có cột giờ bên trái. */
+function renderAgenda(days, events){
+  const today = dateKey(new Date()), notes = state.data.notes.day;
+  $('calendar').innerHTML = `<div class="agenda">${days.map(d => {
+    const k = dateKey(d), list = eventsOn(events, k);
+    return `<div class="aday${k===today?' today':''}"><div class="ahead"><span data-goto="${k}">${DAY_NAMES[d.getDay()]} ${pad(d.getDate())}/${pad(d.getMonth()+1)}</span>${canEdit()?`<button class="small" data-add="${k}" title="Thêm lịch">＋</button>`:''}</div><div class="abody">${notes[k]?`<div class="daynote">📝 ${escapeHtml(notes[k])}</div>`:''}${list.map(e => `<div class="arow"><div class="atime"><span class="ts">${ampm(e.start)}</span><span class="te">${ampm(e.end)}</span></div>${eventCard(e)}</div>`).join('') || '<div class="hint">Không có lịch</div>'}</div></div>`;
+  }).join('')}</div>`;
 }
 function renderMonth(events){
   const d = state.viewDate, first = new Date(d.getFullYear(), d.getMonth(), 1, 12), last = new Date(d.getFullYear(), d.getMonth()+1, 0, 12);
@@ -329,7 +400,7 @@ function renderMonth(events){
   let html = '<div class="month">' + ['T2','T3','T4','T5','T6','T7','CN'].map(x => `<div class="mhead">${x}</div>`).join('');
   for(let i=0; i<cells; i++){
     const day = addDays(start,i), k = dateKey(day), list = eventsOn(events, k);
-    html += `<div class="mcell ${day.getMonth()!==d.getMonth()?'other':''} ${k===today?'today':''}" data-goto="${k}"><div class="num">${day.getDate()}${state.data.notes.day[k]?' 📝':''}</div>${list.map(e => `<div class="mev" style="background:${escapeHtml(cardColor(e))}">${markOf(e)?MARKS[markOf(e)].icon+' ':''}${escapeHtml(e.start)} ${escapeHtml(e.title)}</div>`).join('')}${list.length?`<div class="cnt">${list.length} lịch</div>`:''}</div>`;
+    html += `<div class="mcell ${day.getMonth()!==d.getMonth()?'other':''} ${k===today?'today':''}" data-goto="${k}"><div class="num">${day.getDate()}${state.data.notes.day[k]?' 📝':''}</div>${list.map(e => `<div class="mev" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${markOf(e)?MARKS[markOf(e)].icon+' ':''}${escapeHtml(e.start)} ${escapeHtml(e.title)}</div>`).join('')}${list.length?`<div class="cnt">${list.length} lịch</div>`:''}</div>`;
   }
   $('calendar').innerHTML = html + '</div>';
 }
@@ -350,6 +421,15 @@ function render(){
   const events = filteredEvents();
   ({day:renderDay, week:renderWeek, month:renderMonth, list:renderList})[state.view](events);
   bindActions();
+  markNow();
+}
+function markNow(){
+  const d = new Date(), k = dateKey(d), now = d.getHours()*60 + d.getMinutes();
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const on = el.dataset.k === k && toMin(el.dataset.s) <= now && now < toMin(el.dataset.e);
+    el.classList.toggle('now', on);
+    el.parentElement?.closest('.gev,.arow')?.classList.toggle('now', on);
+  });
 }
 function bindActions(){
   document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openEventForm(b.dataset.edit));
@@ -481,8 +561,40 @@ $('nextBtn').onclick = () => move(1);
 $('todayBtn').onclick = () => { state.viewDate = new Date(); render(); };
 window.addEventListener('beforeunload', e => { if(state.dirty){ e.preventDefault(); e.returnValue = ''; } });
 
+/* ================== GIAO DIỆN ĐIỆN THOẠI ================== */
+const LAYOUT_KEY = 'tkb_layout';
+const LAYOUTS = { auto:{ icon:'🔄', label:'Tự động' }, mobile:{ icon:'📱', label:'Điện thoại' }, desktop:{ icon:'🖥️', label:'Máy tính' } };
+const mobileQuery = matchMedia('(max-width: 760px)');
+let layoutPref = LAYOUTS[localStorage.getItem(LAYOUT_KEY)] ? localStorage.getItem(LAYOUT_KEY) : 'auto';
+function isMobile(){ return layoutPref === 'mobile' || (layoutPref === 'auto' && mobileQuery.matches); }
+function applyLayout(){
+  document.body.classList.toggle('mobile', isMobile());
+  const l = LAYOUTS[layoutPref];
+  $('layoutBtn').innerHTML = `${l.icon}<span class="lbl"> ${l.label}</span>`;
+  $('layoutBtn').title = `Giao diện: ${l.label} (bấm để đổi)`;
+  render();
+}
+$('layoutBtn').onclick = () => {
+  const order = Object.keys(LAYOUTS);
+  layoutPref = order[(order.indexOf(layoutPref)+1) % order.length];
+  localStorage.setItem(LAYOUT_KEY, layoutPref);
+  applyLayout(); toast(`Giao diện: ${LAYOUTS[layoutPref].label}`);
+};
+mobileQuery.addEventListener('change', applyLayout);
+/* Vuốt ngang trên lịch để chuyển ngày/tuần/tháng trên điện thoại. */
+let touch0 = null;
+$('calendar').addEventListener('touchstart', e => { touch0 = isMobile() && e.touches.length === 1 ? { x:e.touches[0].clientX, y:e.touches[0].clientY } : null; }, {passive:true});
+$('calendar').addEventListener('touchend', e => {
+  if(!touch0) return;
+  const dx = e.changedTouches[0].clientX - touch0.x, dy = e.changedTouches[0].clientY - touch0.y;
+  touch0 = null;
+  if(Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 2) move(dx < 0 ? 1 : -1);
+}, {passive:true});
+applyLayout();
+
 state.user = FIXED_USERS.find(u => u.username === localStorage.getItem(USER_KEY)) || null;
 refreshControls();
 loadData();
 setInterval(() => loadData({quiet:true}), POLL_MS);
+setInterval(markNow, 30000);
 </script></body></html>
