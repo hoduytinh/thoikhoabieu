@@ -32,25 +32,26 @@ select{padding:8px;border:1px solid var(--line);border-radius:9px;background:#ff
 .gh.today{background:#edf3ff;color:#214eb4}
 .gh.corner{border-left:0;position:sticky;left:0;z-index:4}
 .gsec{background:#eef2f9;color:#173e9a;font-weight:800;font-size:12px;letter-spacing:.05em;padding:4px 10px;border-top:1px solid var(--line)}
-.gt{position:sticky;left:0;z-index:3;background:#fff;border-top:1px solid var(--line);padding:2px 6px;text-align:center;font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}
-.gc{border-top:1px solid var(--line);border-left:1px solid var(--line);min-width:0}
+.gt{position:sticky;left:0;z-index:3;background:#fff;border-top:1px dashed rgba(148,163,184,.2);padding:2px 6px;text-align:center;font-size:12px;font-weight:800;color:var(--ink);white-space:nowrap}
+.gc{border-top:1px dashed rgba(148,163,184,.2);border-left:1px solid var(--line);min-width:0}
 .gc .daynote{margin:4px}
 .gc.today{background:#f7f9ff}
 .gev{position:relative;z-index:1;padding:2px;min-width:0;display:flex}
 .gev>.event{flex:1;min-width:0}
-.event.now,.mev.now{background:linear-gradient(120deg,#fef08a,#facc15,#fde047,#fbbf24,#fef08a)!important;background-size:300% 300%!important;border-left-color:#b45309;color:#422006;position:relative;z-index:2;overflow:hidden;animation:nowpulse 1.6s ease-in-out infinite,nowflow 4s linear infinite}
-.event.now{transform:scale(1.03);border-left-width:6px}
-.event.now b{font-size:14px;color:#422006}
-.event.now small,.event.now .time{color:#713f12;opacity:1}
-.event.now::before,.mev.now::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-20deg);animation:nowshine 2.2s ease-in-out infinite;pointer-events:none}
-.event.now::after{content:'● ĐANG DIỄN RA';display:inline-block;margin-top:5px;padding:2px 8px;border-radius:999px;background:#b45309;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;animation:nowblink 1s steps(2,start) infinite}
+.event:is(.now,.hot),.mev:is(.now,.hot){background:linear-gradient(120deg,#fef08a,#facc15,#fde047,#fbbf24,#fef08a)!important;background-size:300% 300%!important;border-left-color:#b45309;color:#422006;position:relative;z-index:2;overflow:hidden;animation:nowpulse 1.6s ease-in-out infinite,nowflow 4s linear infinite}
+.event:is(.now,.hot){transform:scale(1.03);border-left-width:6px}
+.event:is(.now,.hot) b{font-size:14px;color:#422006}
+.event:is(.now,.hot) small,.event:is(.now,.hot) .time{color:#713f12;opacity:1}
+.event:is(.now,.hot)::before,.mev:is(.now,.hot)::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);transform:skewX(-20deg);animation:nowshine 2.2s ease-in-out infinite;pointer-events:none}
+.event:is(.now,.hot)::after{content:'★ NỔI BẬT';display:inline-block;margin-top:5px;padding:2px 8px;border-radius:999px;background:#b45309;color:#fff;font-size:11px;font-weight:800;letter-spacing:.3px;animation:nowblink 1s steps(2,start) infinite}
+.event.event.now::after{content:'● ĐANG DIỄN RA'}
 .gev.now{z-index:5}
 .arow.now .atime{background:#fde047;box-shadow:0 0 0 2px #facc15,0 0 12px 3px rgba(250,204,21,.7);animation:nowpulse 1.6s ease-in-out infinite}
 @keyframes nowpulse{0%,100%{box-shadow:0 0 0 2px #facc15,0 0 10px 2px rgba(250,204,21,.6)}50%{box-shadow:0 0 0 4px #eab308,0 0 26px 9px rgba(250,204,21,1)}}
 @keyframes nowflow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes nowshine{0%{left:-60%}60%,100%{left:130%}}
 @keyframes nowblink{to{opacity:.35}}
-@media (prefers-reduced-motion:reduce){.event.now,.mev.now,.arow.now .atime,.event.now::before,.mev.now::before,.event.now::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.event:is(.now,.hot),.mev:is(.now,.hot),.arow.now .atime,.event:is(.now,.hot)::before,.mev:is(.now,.hot)::before,.event:is(.now,.hot)::after{animation:none}}
 .daynote{font-size:12px;background:#fff8e1;border-radius:7px;padding:5px 7px;white-space:pre-wrap;overflow-wrap:anywhere}
 .event{border-radius:9px;padding:6px 8px;font-size:12px;border-left:4px solid rgba(0,0,0,.22);background:#e8efff;overflow-wrap:anywhere}
 .event .time{font-size:10px;line-height:1.2;color:#475467;opacity:.85}
@@ -306,7 +307,7 @@ function toggleMark(id, k, type){
 }
 function eventCard(e){
   const s = studentOf(e), m = markOf(e), id = escapeHtml(e.id), k = escapeHtml(e.date);
-  return `<article class="event ${m}" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
+  return `<article class="event ${m}${e.highlight?' hot':''}" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}" data-date="${k}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
 }
 
 function noteInfo(type){
@@ -400,7 +401,7 @@ function renderMonth(events){
   let html = '<div class="month">' + ['T2','T3','T4','T5','T6','T7','CN'].map(x => `<div class="mhead">${x}</div>`).join('');
   for(let i=0; i<cells; i++){
     const day = addDays(start,i), k = dateKey(day), list = eventsOn(events, k);
-    html += `<div class="mcell ${day.getMonth()!==d.getMonth()?'other':''} ${k===today?'today':''}" data-goto="${k}"><div class="num">${day.getDate()}${state.data.notes.day[k]?' 📝':''}</div>${list.map(e => `<div class="mev" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${markOf(e)?MARKS[markOf(e)].icon+' ':''}${escapeHtml(e.start)} ${escapeHtml(e.title)}</div>`).join('')}${list.length?`<div class="cnt">${list.length} lịch</div>`:''}</div>`;
+    html += `<div class="mcell ${day.getMonth()!==d.getMonth()?'other':''} ${k===today?'today':''}" data-goto="${k}"><div class="num">${day.getDate()}${state.data.notes.day[k]?' 📝':''}</div>${list.map(e => `<div class="mev${e.highlight?' hot':''}" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${markOf(e)?MARKS[markOf(e)].icon+' ':''}${escapeHtml(e.start)} ${escapeHtml(e.title)}</div>`).join('')}${list.length?`<div class="cnt">${list.length} lịch</div>`:''}</div>`;
   }
   $('calendar').innerHTML = html + '</div>';
 }
@@ -428,11 +429,11 @@ function markNow(){
   document.querySelectorAll('[data-k]').forEach(el => {
     const on = el.dataset.k === k && toMin(el.dataset.s) <= now && now < toMin(el.dataset.e);
     el.classList.toggle('now', on);
-    el.parentElement?.closest('.gev,.arow')?.classList.toggle('now', on);
+    el.parentElement?.closest('.gev,.arow')?.classList.toggle('now', on || el.classList.contains('hot'));
   });
 }
 function bindActions(){
-  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => openEventForm(b.dataset.edit));
+  document.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => editEvent(b.dataset.edit, b.dataset.date));
   document.querySelectorAll('[data-delete]').forEach(b => b.onclick = () => deleteEvent(b.dataset.delete, b.dataset.date));
   document.querySelectorAll('[data-mark]').forEach(b => b.onclick = () => toggleMark(b.dataset.id, b.dataset.date, b.dataset.mark));
   document.querySelectorAll('[data-add]').forEach(b => b.onclick = () => openEventForm(null, b.dataset.add));
@@ -457,13 +458,17 @@ function openLogin(){
   };
 }
 
-function openEventForm(id=null, date=null){
+function openEventForm(id=null, date=null, single=null){
   if(!canEdit()) return;
   if(!state.data.students.length){ toast('Hãy thêm học sinh trước.', 'err'); openStudentsForm(); return; }
-  const old = id ? state.data.events.find(e => e.id === id) : null;
+  const series = id ? state.data.events.find(e => e.id === id) : null;
+  if(single && !series) return;
+  const old = single ? null : series;
   const sid = $('studentFilter').value;
-  const e = old || { id:'ev_'+crypto.randomUUID(), studentId: sid !== 'all' ? sid : state.data.students[0].id, title:'', date: date || dateKey(state.viewDate), start:'07:00', end:'08:00', location:'', notes:'', color:'', repeat:'none', until:'' };
-  openModal(`<h2>${old?'Sửa lịch':'Thêm lịch'}</h2>${old && isRepeat(old)?'<p class="hint">Đây là lịch lặp lại: thay đổi áp dụng cho cả chuỗi.</p>':''}<form id="eventForm"><div class="formgrid"><div class="field full"><label>Học sinh</label><select id="evStudent" required>${state.data.students.map(s => `<option value="${escapeHtml(s.id)}" ${s.id===e.studentId?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}</select></div><div class="field full"><label>Môn học / hoạt động</label><input id="evTitle" required maxlength="100" value="${escapeHtml(e.title)}"></div><div class="field"><label>${isRepeat(e)?'Ngày bắt đầu':'Ngày'}</label><input id="evDate" type="date" required value="${escapeHtml(e.date)}"></div><div class="field"><label>Địa điểm</label><input id="evLocation" maxlength="100" value="${escapeHtml(e.location||'')}"></div><div class="field"><label>Giờ bắt đầu</label><input id="evStart" type="time" required value="${escapeHtml(e.start)}"></div><div class="field"><label>Thời lượng</label><select id="evDur">${DURATIONS.map(m => `<option value="${m}">${durLabel(m)}</option>`).join('')}<option value="">Tùy chỉnh</option></select></div><div class="field"><label>Giờ kết thúc</label><input id="evEnd" type="time" required value="${escapeHtml(e.end)}"></div><div class="field"><label>Màu (mặc định theo học sinh)</label><input id="evColor" type="color" value="${escapeHtml(eventColor(e))}"></div><div class="field"><label>Lặp lại</label><select id="evRepeat">${Object.entries(REPEAT_LABELS).map(([v,l]) => `<option value="${v}" ${v===(e.repeat||'none')?'selected':''}>${l}</option>`).join('')}</select></div><div class="field" id="evUntilField"><label>Lặp đến ngày (để trống = mãi mãi)</label><input id="evUntil" type="date" value="${escapeHtml(e.until||'')}"></div><div class="field full"><label>Ghi chú</label><textarea id="evNotes" maxlength="500">${escapeHtml(e.notes||'')}</textarea></div></div><div class="modalfoot"><button type="button" id="cancelEvent">Hủy</button><div class="right"><button class="primary" type="submit">Xong</button></div></div></form>`);
+  const e = single
+    ? { ...series, id:'ev_'+crypto.randomUUID(), date:single, repeat:'none', until:'', exceptions:[], marks: series.marks?.[single] ? { [single]: series.marks[single] } : {} }
+    : old || { id:'ev_'+crypto.randomUUID(), studentId: sid !== 'all' ? sid : state.data.students[0].id, title:'', date: date || dateKey(state.viewDate), start:'07:00', end:'08:00', location:'', notes:'', color:'', repeat:'none', until:'' };
+  openModal(`<h2>${single?`Sửa riêng ngày ${fmtDate(parseDate(single))}`:old?'Sửa lịch':'Thêm lịch'}</h2>${single?'<p class="hint">Chỉ thay đổi ngày này, các ngày khác của chuỗi giữ nguyên.</p>':old && isRepeat(old)?'<p class="hint">Đây là lịch lặp lại: thay đổi áp dụng cho cả chuỗi.</p>':''}<form id="eventForm"><div class="formgrid"><div class="field full"><label>Học sinh</label><select id="evStudent" required>${state.data.students.map(s => `<option value="${escapeHtml(s.id)}" ${s.id===e.studentId?'selected':''}>${escapeHtml(s.name)}</option>`).join('')}</select></div><div class="field full"><label>Môn học / hoạt động</label><input id="evTitle" required maxlength="100" value="${escapeHtml(e.title)}"></div><div class="field"><label>${isRepeat(e)?'Ngày bắt đầu':'Ngày'}</label><input id="evDate" type="date" required value="${escapeHtml(e.date)}"></div><div class="field"><label>Địa điểm</label><input id="evLocation" maxlength="100" value="${escapeHtml(e.location||'')}"></div><div class="field"><label>Giờ bắt đầu</label><input id="evStart" type="time" required value="${escapeHtml(e.start)}"></div><div class="field"><label>Thời lượng</label><select id="evDur">${DURATIONS.map(m => `<option value="${m}">${durLabel(m)}</option>`).join('')}<option value="">Tùy chỉnh</option></select></div><div class="field"><label>Giờ kết thúc</label><input id="evEnd" type="time" required value="${escapeHtml(e.end)}"></div><div class="field"><label>Màu (mặc định theo học sinh)</label><input id="evColor" type="color" value="${escapeHtml(eventColor(e))}"></div><div class="field"><label>Lặp lại</label><select id="evRepeat">${Object.entries(REPEAT_LABELS).map(([v,l]) => `<option value="${v}" ${v===(e.repeat||'none')?'selected':''}>${l}</option>`).join('')}</select></div><div class="field" id="evUntilField"><label>Lặp đến ngày (để trống = mãi mãi)</label><input id="evUntil" type="date" value="${escapeHtml(e.until||'')}"></div><div class="field full"><label>Ghi chú</label><textarea id="evNotes" maxlength="500">${escapeHtml(e.notes||'')}</textarea></div><div class="field full"><label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700"><input id="evHighlight" type="checkbox" style="width:auto" ${e.highlight?'checked':''}> ⭐ Nổi bật</label></div></div><div class="modalfoot"><button type="button" id="cancelEvent">Hủy</button><div class="right"><button class="primary" type="submit">Xong</button></div></div></form>`);
   const syncEnd = () => { const d = $('evDur').value; if(d && $('evStart').value) $('evEnd').value = fromMin(Math.min(toMin($('evStart').value) + Number(d), 23*60+59)); };
   const syncDur = () => { if(!$('evStart').value || !$('evEnd').value) return; const diff = toMin($('evEnd').value) - toMin($('evStart').value); $('evDur').value = DURATIONS.includes(diff) ? String(diff) : ''; };
   const syncRepeat = () => $('evUntilField').classList.toggle('hidden', $('evRepeat').value === 'none');
@@ -481,12 +486,26 @@ function openEventForm(id=null, date=null){
     const start = $('evStart').value, end = $('evEnd').value, repeat = $('evRepeat').value, until = repeat === 'none' ? '' : $('evUntil').value;
     if(start >= end){ alert('Giờ kết thúc phải sau giờ bắt đầu.'); return; }
     if(until && until < $('evDate').value){ alert('Ngày kết thúc lặp lại phải sau ngày bắt đầu.'); return; }
-    const next = { ...e, studentId:$('evStudent').value, title:$('evTitle').value.trim(), date:$('evDate').value, start, end, location:$('evLocation').value.trim(), notes:$('evNotes').value.trim(), color: colorTouched ? $('evColor').value : '', repeat, until, exceptions: repeat === 'none' ? [] : (e.exceptions || []) };
+    const next = { ...e, studentId:$('evStudent').value, title:$('evTitle').value.trim(), date:$('evDate').value, start, end, location:$('evLocation').value.trim(), notes:$('evNotes').value.trim(), color: colorTouched ? $('evColor').value : '', repeat, until, exceptions: repeat === 'none' ? [] : (e.exceptions || []), highlight: $('evHighlight').checked };
+    if(!next.highlight) delete next.highlight;
     if(repeat === 'none' && !isRepeat(e)) next.marks = e.marks?.[e.date] ? { [next.date]: e.marks[e.date] } : {};
     if(!next.title) return;
+    if(single){
+      series.exceptions = [...new Set([...(series.exceptions || []), single])];
+      if(series.marks) delete series.marks[single];
+    }
     if(old) state.data.events = state.data.events.map(x => x.id === id ? next : x); else state.data.events.push(next);
     closeModal(); markDirty();
   };
+}
+function editEvent(id, k){
+  const e = state.data.events.find(x => x.id === id);
+  if(!e) return;
+  if(!isRepeat(e) || !k) return openEventForm(id);
+  openModal(`<h2>Sửa lịch lặp lại</h2><p>“${escapeHtml(e.title)}” · ${REPEAT_LABELS[e.repeat]}</p><div class="modalfoot"><button type="button" id="edCancel">Hủy</button><div class="right"><button id="edOne">Chỉ ngày ${fmtDate(parseDate(k))}</button><button class="primary" id="edAll">Cả chuỗi</button></div></div>`);
+  $('edCancel').onclick = closeModal;
+  $('edOne').onclick = () => openEventForm(id, null, k);
+  $('edAll').onclick = () => openEventForm(id);
 }
 function deleteEvent(id, k){
   if(!canEdit()) return;
@@ -563,14 +582,13 @@ window.addEventListener('beforeunload', e => { if(state.dirty){ e.preventDefault
 
 /* ================== GIAO DIỆN ĐIỆN THOẠI ================== */
 const LAYOUT_KEY = 'tkb_layout';
-const LAYOUTS = { auto:{ icon:'🔄', label:'Tự động' }, mobile:{ icon:'📱', label:'Điện thoại' }, desktop:{ icon:'🖥️', label:'Máy tính' } };
-const mobileQuery = matchMedia('(max-width: 760px)');
-let layoutPref = LAYOUTS[localStorage.getItem(LAYOUT_KEY)] ? localStorage.getItem(LAYOUT_KEY) : 'auto';
-function isMobile(){ return layoutPref === 'mobile' || (layoutPref === 'auto' && mobileQuery.matches); }
+const LAYOUTS = { desktop:{ icon:'🖥️', label:'Máy tính' }, mobile:{ icon:'📱', label:'Điện thoại' } };
+let layoutPref = LAYOUTS[localStorage.getItem(LAYOUT_KEY)] ? localStorage.getItem(LAYOUT_KEY) : 'desktop';
+function isMobile(){ return layoutPref === 'mobile'; }
 function applyLayout(){
   document.body.classList.toggle('mobile', isMobile());
   const l = LAYOUTS[layoutPref];
-  $('layoutBtn').innerHTML = `${l.icon}<span class="lbl"> ${l.label}</span>`;
+  $('layoutBtn').innerHTML = `${l.icon} ${l.label}`;
   $('layoutBtn').title = `Giao diện: ${l.label} (bấm để đổi)`;
   render();
 }
@@ -580,7 +598,6 @@ $('layoutBtn').onclick = () => {
   localStorage.setItem(LAYOUT_KEY, layoutPref);
   applyLayout(); toast(`Giao diện: ${LAYOUTS[layoutPref].label}`);
 };
-mobileQuery.addEventListener('change', applyLayout);
 /* Vuốt ngang trên lịch để chuyển ngày/tuần/tháng trên điện thoại. */
 let touch0 = null;
 $('calendar').addEventListener('touchstart', e => { touch0 = isMobile() && e.touches.length === 1 ? { x:e.touches[0].clientX, y:e.touches[0].clientY } : null; }, {passive:true});
