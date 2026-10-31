@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 11,
-  "updatedAt": "2026-10-31T04:20:12.747Z",
+  "revision": 12,
+  "updatedAt": "2026-10-31T04:28:42.599Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -183,8 +183,8 @@
       "studentId": "student1",
       "title": "Tiếng Trung",
       "date": "2026-10-31",
-      "start": "07:00",
-      "end": "09:00",
+      "start": "10:00",
+      "end": "12:00",
       "location": "168 Hoa Lan",
       "notes": "",
       "color": "",
