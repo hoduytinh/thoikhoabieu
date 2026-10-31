@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 12,
-  "updatedAt": "2026-10-31T04:28:42.599Z",
+  "revision": 13,
+  "updatedAt": "2026-10-31T05:46:00.075Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -55,8 +55,8 @@
       "studentId": "student1",
       "title": "GS IELT",
       "date": "2026-10-25",
-      "start": "13:30",
-      "end": "15:30",
+      "start": "13:00",
+      "end": "15:00",
       "location": "Nhà",
       "notes": "",
       "color": "",
