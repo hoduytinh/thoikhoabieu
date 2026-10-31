@@ -67,6 +67,14 @@ select{padding:8px;border:1px solid var(--line);border-radius:9px;background:#ff
 .event.absent .tag{background:#dc2626}
 button.mark-late.on{background:#d97706;border-color:#d97706;color:#fff}
 button.mark-absent.on{background:#dc2626;border-color:#dc2626;color:#fff}
+.modal.wide{width:min(760px,100%)}
+.sumwrap{overflow-x:auto;margin-top:12px}
+.sumtable{width:100%;border-collapse:collapse;font-size:13px}
+.sumtable th,.sumtable td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+.sumtable th{background:#f7f9fc;font-size:12px}
+.sumtable th:first-child,.sumtable td:first-child{text-align:left;white-space:normal}
+.sumtable tfoot td{font-weight:800;background:#f7f9fc}
+.sumtable .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;border:1px solid #0002}
 .empty{padding:20px;text-align:center;color:var(--muted);font-size:13px}
 .daylist{display:grid;gap:8px}
 .listday{font-weight:700;margin-top:8px}
@@ -149,7 +157,7 @@ body.mobile .modalfoot button{padding:10px 14px}
 body.mobile #toast{bottom:12px}
 </style></head>
 <body><main class="app">
-<div class="stickybar"><header class="top"><div class="brand"><h1>📚 Thời khóa biểu</h1><div id="userLine" class="hint">Chế độ xem</div></div><div class="actions"><button id="studentsBtn" class="hidden" title="Học sinh">👥<span class="lbl"> Học sinh</span></button><button id="addBtn" class="hidden" title="Thêm lịch">＋<span class="lbl"> Thêm lịch</span></button><button id="saveBtn" class="primary hidden">💾</button><button id="layoutBtn"></button><button id="loginBtn">Đăng nhập</button></div></header>
+<div class="stickybar"><header class="top"><div class="brand"><h1>📚 Thời khóa biểu</h1><div id="userLine" class="hint">Chế độ xem</div></div><div class="actions"><button id="summaryBtn" class="hidden" title="Tổng hợp tháng">📊<span class="lbl"> Tổng hợp</span></button><button id="studentsBtn" class="hidden" title="Học sinh">👥<span class="lbl"> Học sinh</span></button><button id="addBtn" class="hidden" title="Thêm lịch">＋<span class="lbl"> Thêm lịch</span></button><button id="saveBtn" class="primary hidden">💾</button><button id="layoutBtn"></button><button id="loginBtn">Đăng nhập</button></div></header>
 <section class="panel"><div class="toolbar"><h2 id="rangeTitle">Lịch tuần</h2><div class="actions"><button id="prevBtn">←</button><button id="todayBtn">Hôm nay</button><button id="nextBtn">→</button><select id="viewMode" aria-label="Kiểu xem"><option value="day">Ngày</option><option value="week">Tuần</option><option value="month">Tháng</option><option value="list">Danh sách</option></select><select id="studentFilter" aria-label="Lọc học sinh"><option value="all">Tất cả học sinh</option></select></div></div></section></div>
 <section class="panel"><div id="notes" class="notes"></div></section>
 <section class="panel"><div id="calendar"></div></section>
@@ -160,7 +168,8 @@ body.mobile #toast{bottom:12px}
 */
 const FIXED_USERS = [
 /* role: 'full' = toàn quyền (sửa lịch, học sinh, ghi chú, Trễ/Nghỉ, lưu)
-         'mark' = chỉ sửa ghi chú và Trễ/Nghỉ (vẫn lưu được các thay đổi đó) */
+         'mark' = chỉ sửa ghi chú và đánh dấu Trễ/Nghỉ cho buổi bình thường
+                  (không đổi được buổi đã Trễ/Nghỉ; vẫn lưu được các thay đổi đó) */
   { username: 'admin', password: 'tinhteo123', label: 'Quản trị lịch', role: 'full' },
   { username: 'giasu', password: 'pass123', label: 'Gia sư', role: 'mark' },
   { username: 'buu', password: 'pass123', label: 'Bửu', role: 'full' }
@@ -264,6 +273,7 @@ function refreshControls(){
   $('loginBtn').title = state.user ? `Đăng xuất (${state.user.username})` : 'Đăng nhập';
   $('addBtn').classList.toggle('hidden', !ed);
   $('studentsBtn').classList.toggle('hidden', !ed);
+  $('summaryBtn').classList.toggle('hidden', !ed);
   $('saveBtn').classList.toggle('hidden', !canMark());
   $('saveBtn').classList.toggle('dirty', state.dirty);
   $('saveBtn').innerHTML = state.saving ? '⏳<span class="lbl"> Đang lưu…</span>' : state.dirty ? '💾<span class="lbl"> Lưu thay đổi</span>' : '💾<span class="lbl"> Đã lưu</span>';
@@ -304,13 +314,17 @@ const cardColor = e => MARKS[markOf(e)]?.bg || eventColor(e);
 function toggleMark(id, k, type){
   const e = state.data.events.find(x => x.id === id);
   if(!e || !canMark()) return;
+  if(!canEdit()){
+    if(e.marks?.[k]){ toast('Buổi đã đánh dấu Trễ/Nghỉ, gia sư không thể thay đổi.', 'err'); return; }
+    if(!confirm(`Đánh dấu buổi “${e.title}” ngày ${fmtDate(parseDate(k))} là ${MARKS[type].label}?\nSau khi đánh dấu, gia sư không thể đổi lại.`)) return;
+  }
   e.marks = { ...(e.marks || {}) };
   if(e.marks[k] === type) delete e.marks[k]; else e.marks[k] = type;
   markDirty();
 }
 function eventCard(e){
   const s = studentOf(e), m = markOf(e), id = escapeHtml(e.id), k = escapeHtml(e.date);
-  return `<article class="event ${m}${e.highlight?' hot':''}" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" title="Đánh dấu ${v.label} (chỉ ngày này)">${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}" data-date="${k}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
+  return `<article class="event ${m}${e.highlight?' hot':''}" data-k="${k}" data-s="${escapeHtml(e.start)}" data-e="${escapeHtml(e.end)}" style="background:${escapeHtml(cardColor(e))}">${m?`<span class="tag">${MARKS[m].icon} ${MARKS[m].label}</span>`:''}<div class="time">${escapeHtml(e.start)} – ${escapeHtml(e.end)}</div><b>${escapeHtml(e.title)}${isRepeat(e)?` <span title="${REPEAT_LABELS[e.repeat]}">🔁</span>`:''}</b>${s?`<small>👤 ${escapeHtml(s.name)}</small>`:''}${e.location?`<small>📍 ${escapeHtml(e.location)}</small>`:''}${e.notes?`<small>${escapeHtml(e.notes)}</small>`:''}${canMark()?`<div class="btns">${Object.entries(MARKS).map(([t,v]) => `<button class="small mark-${t} ${m===t?'on':''}" data-mark="${t}" data-id="${id}" data-date="${k}" ${m && !canEdit()?'disabled title="Đã đánh dấu, không thể thay đổi"':`title="Đánh dấu ${v.label} (chỉ ngày này)"`}>${v.label}</button>`).join('')}${canEdit()?`<button class="small" data-edit="${id}" data-date="${k}">Sửa</button><button class="small danger" data-delete="${id}" data-date="${k}">Xóa</button>`:''}</div>`:''}</article>`;
 }
 
 function noteInfo(type){
@@ -522,6 +536,40 @@ function deleteEvent(id, k){
   $('delOne').onclick = () => { e.exceptions = [...(e.exceptions || []), k]; closeModal(); markDirty(); };
 }
 
+/* Tổng hợp theo tháng: gom theo học sinh + tên lịch, đếm số buổi Thực hiện/Trễ/Nghỉ/Sắp tới. */
+function monthSummary(mk){
+  const [y,m] = mk.split('-').map(Number), days = new Date(y,m,0).getDate();
+  const d = new Date(), now = `${dateKey(d)} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  const events = filteredEvents(), rows = new Map();
+  for(let i=1; i<=days; i++){
+    const k = `${mk}-${pad(i)}`;
+    for(const e of eventsOn(events, k)){
+      const key = `${e.studentId}|${e.title.trim().toLowerCase()}`;
+      if(!rows.has(key)) rows.set(key, { title:e.title, student:studentOf(e)?.name || '', color:eventColor(e), total:0, done:0, late:0, absent:0, upcoming:0 });
+      const r = rows.get(key), mark = markOf(e);
+      r.total++;
+      if(mark) r[mark]++; else if(`${k} ${e.end}` > now) r.upcoming++; else r.done++;
+    }
+  }
+  return [...rows.values()].sort((a,b) => a.student.localeCompare(b.student,'vi') || a.title.localeCompare(b.title,'vi'));
+}
+function openSummary(){
+  if(!canEdit()) return;
+  const sid = $('studentFilter').value, sname = sid === 'all' ? 'Tất cả học sinh' : state.data.students.find(s => s.id === sid)?.name || '';
+  openModal(`<h2>📊 Tổng hợp tháng</h2><div class="field"><label>Tháng</label><input id="sumMonth" type="month" value="${monthKey(state.viewDate)}"></div><p class="hint">Học sinh: ${escapeHtml(sname)} (đổi ở bộ lọc học sinh). “Thực hiện” = buổi đã qua, không Trễ/Nghỉ; “Sắp tới” = buổi chưa diễn ra.</p><div id="sumBody"></div>`);
+  document.querySelector('.modal').classList.add('wide');
+  const paint = () => {
+    const mk = $('sumMonth').value;
+    if(!mk){ $('sumBody').innerHTML = ''; return; }
+    const rows = monthSummary(mk);
+    if(!rows.length){ $('sumBody').innerHTML = '<div class="empty">Không có lịch trong tháng này.</div>'; return; }
+    const sum = f => rows.reduce((t,r) => t + r[f], 0), cols = ['total','done','late','absent','upcoming'];
+    $('sumBody').innerHTML = `<div class="sumwrap"><table class="sumtable"><thead><tr><th>Lịch</th><th>Học sinh</th><th>Tổng buổi</th><th>✅ Thực hiện</th><th>⏰ Trễ</th><th>❌ Nghỉ</th><th>🕒 Sắp tới</th></tr></thead><tbody>${rows.map(r => `<tr><td><span class="dot" style="background:${escapeHtml(r.color)}"></span>${escapeHtml(r.title)}</td><td>${escapeHtml(r.student)}</td>${cols.map(c => `<td>${r[c]}</td>`).join('')}</tr>`).join('')}</tbody><tfoot><tr><td>Tổng (${rows.length} lịch)</td><td></td>${cols.map(c => `<td>${sum(c)}</td>`).join('')}</tr></tfoot></table></div>`;
+  };
+  $('sumMonth').onchange = paint;
+  paint();
+}
+
 function openNoteForm(type){
   if(!canMark()) return;
   const {key,label} = noteInfo(type);
@@ -576,6 +624,7 @@ $('loginBtn').onclick = openLogin;
 $('saveBtn').onclick = save;
 $('addBtn').onclick = () => openEventForm();
 $('studentsBtn').onclick = openStudentsForm;
+$('summaryBtn').onclick = openSummary;
 $('studentFilter').onchange = render;
 $('viewMode').onchange = () => { state.view = $('viewMode').value; render(); };
 $('prevBtn').onclick = () => move(-1);
