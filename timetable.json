@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "revision": 10,
-  "updatedAt": "2026-10-25T06:57:24.816Z",
-  "updatedBy": "buu",
+  "revision": 11,
+  "updatedAt": "2026-10-31T04:20:12.747Z",
+  "updatedBy": "admin",
   "students": [
     {
       "id": "student1",
@@ -177,6 +177,20 @@
       "until": "",
       "exceptions": [],
       "marks": {}
+    },
+    {
+      "id": "ev_e8b28cb0-4dd2-4b75-bbc1-78d5d783a0f6",
+      "studentId": "student1",
+      "title": "Tiếng Trung",
+      "date": "2026-10-31",
+      "start": "07:00",
+      "end": "09:00",
+      "location": "168 Hoa Lan",
+      "notes": "",
+      "color": "",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
     }
   ],
   "notes": {
