@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "revision": 13,
-  "updatedAt": "2026-10-31T05:46:00.075Z",
+  "revision": 14,
+  "updatedAt": "2026-11-07T05:49:58.016Z",
   "updatedBy": "admin",
   "students": [
     {
@@ -45,7 +45,9 @@
       "color": "",
       "repeat": "weekly",
       "until": "",
-      "exceptions": [],
+      "exceptions": [
+        "2026-11-07"
+      ],
       "marks": {
         "2026-10-24": "absent"
       }
@@ -191,6 +193,21 @@
       "repeat": "weekly",
       "until": "",
       "exceptions": []
+    },
+    {
+      "id": "ev_2b9cb126-7c1d-4912-abb5-f1b424c93369",
+      "studentId": "student1",
+      "title": "GS Toán",
+      "date": "2026-11-08",
+      "start": "18:30",
+      "end": "20:30",
+      "location": "Nhà",
+      "notes": "",
+      "color": "",
+      "repeat": "none",
+      "until": "",
+      "exceptions": [],
+      "marks": {}
     }
   ],
   "notes": {
