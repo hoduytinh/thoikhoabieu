@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "revision": 14,
-  "updatedAt": "2026-11-07T05:49:58.016Z",
-  "updatedBy": "admin",
+  "revision": 15,
+  "updatedAt": "2026-11-08T10:59:36.253Z",
+  "updatedBy": "buu",
   "students": [
     {
       "id": "student1",
@@ -205,6 +205,35 @@
       "notes": "",
       "color": "",
       "repeat": "none",
+      "until": "",
+      "exceptions": [],
+      "marks": {}
+    },
+    {
+      "id": "ev_fa9e3dc4-0c13-470e-8fcb-7ea5b91dec98",
+      "studentId": "st_8d0f47d4-6a1c-4f47-ae2b-e6236195ed60",
+      "title": "Bài Tập cùng thầy Trương",
+      "date": "2026-11-03",
+      "start": "19:30",
+      "end": "21:00",
+      "location": "Trường",
+      "notes": "",
+      "color": "#ecffe5",
+      "repeat": "weekly",
+      "until": "",
+      "exceptions": []
+    },
+    {
+      "id": "ev_f61795c9-0b89-4e7f-b11e-2c5ee7bb6077",
+      "studentId": "st_8d0f47d4-6a1c-4f47-ae2b-e6236195ed60",
+      "title": "Bài Tập cùng thầy Trương",
+      "date": "2026-11-05",
+      "start": "19:30",
+      "end": "21:00",
+      "location": "Trường",
+      "notes": "",
+      "color": "#ebffe5",
+      "repeat": "weekly",
       "until": "",
       "exceptions": [],
       "marks": {}
